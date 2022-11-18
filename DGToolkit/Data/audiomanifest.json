@@ -1,0 +1,121 @@
+{
+  "dlcName": "nutty",
+  "outputPath": "E:\\gitrepos\\audio-generator\\output",
+  "data": [
+    {
+      "name": "Sounds",
+      "files": [
+        {
+          "name": "phone_dial.mp3",
+          "looped": true,
+          "headers": {
+            "volume": 100,
+            "distance": 15,
+            "dopplerFactor": 0,
+            "categoryHash": "02C7B342",
+            "rolloffHash": "C2770146"
+          }
+        },
+        {
+          "name": "phone_ringtone.mp3",
+          "looped": true,
+          "headers": {
+            "volume": 100,
+            "distance": 15,
+            "dopplerFactor": 0,
+            "categoryHash": "02C7B342",
+            "rolloffHash": "C2770146"
+          }
+        },
+        {
+          "name": "lowfuel.mp3",
+          "looped": false,
+          "headers": {
+            "volume": 100,
+            "distance": 5,
+            "dopplerFactor": 0,
+            "categoryHash": "02C7B342",
+            "rolloffHash": "C2770146"
+          }
+        },
+        {
+          "name": "car_lock.mp3",
+          "looped": false,
+          "headers": {
+            "volume": 100,
+            "distance": 30,
+            "dopplerFactor": 0,
+            "categoryHash": "02C7B342",
+            "rolloffHash": "C2770146"
+          }
+        },
+        {
+          "name": "car_unlock.mp3",
+          "looped": false,
+          "headers": {
+            "volume": 100,
+            "distance": 30,
+            "dopplerFactor": 0,
+            "categoryHash": "02C7B342",
+            "rolloffHash": "C2770146"
+          }
+        },
+        {
+          "name": "error_sound.ogg",
+          "looped": false,
+          "headers": {
+            "volume": 100,
+            "distance": 5,
+            "dopplerFactor": 0,
+            "categoryHash": "02C7B342",
+            "rolloffHash": "C2770146"
+          }
+        },
+        {
+          "name": "nospurge.ogg",
+          "looped": false,
+          "headers": {
+            "volume": 100,
+            "distance": 5,
+            "dopplerFactor": 0,
+            "categoryHash": "02C7B342",
+            "rolloffHash": "C2770146"
+          }
+        },
+        {
+          "name": "cuff.ogg",
+          "looped": false,
+          "headers": {
+            "volume": 100,
+            "distance": 15,
+            "dopplerFactor": 0,
+            "categoryHash": "02C7B342",
+            "rolloffHash": "C2770146"
+          }
+        },
+        {
+          "name": "uncuff.ogg",
+          "looped": false,
+          "headers": {
+            "volume": 100,
+            "distance": 15,
+            "dopplerFactor": 0,
+            "categoryHash": "02C7B342",
+            "rolloffHash": "C2770146"
+          }
+        },
+        {
+          "name": "emergency.ogg",
+          "looped": false,
+          "headers": {
+            "volume": 100,
+            "distance": 25,
+            "dopplerFactor": 0,
+            "categoryHash": "02C7B342",
+            "rolloffHash": "C2770146"
+          }
+        }
+      ]
+    }
+  ]
+}

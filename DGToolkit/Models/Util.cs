@@ -8,7 +8,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using Xabe.FFmpeg;
 
-namespace AudioGenerator.Util;
+namespace DGToolkit.Models.Util;
 
 internal class Log
 {
@@ -40,7 +40,7 @@ internal class Xml
         var xmlWriter = XmlWriter.Create(stream, xmlWriterSettings);
         XmlSerializer x = new(container.GetType());
         x.Serialize(xmlWriter, container,
-          new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty })
+            new XmlSerializerNamespaces(new[] {XmlQualifiedName.Empty})
         );
     }
 }
@@ -51,6 +51,7 @@ internal class FFMPEG
     {
         FFmpeg.SetExecutablesPath(Path.Combine(AppContext.BaseDirectory, "../Data"));
     }
+
     /// <summary>
     ///   Wrapper for FFmpeg conversion
     /// </summary>
@@ -61,7 +62,7 @@ internal class FFMPEG
         // Strip name from input file
         var fileName = Util.CustomTrimmer(Path.GetFileNameWithoutExtension(input));
         var args =
-          $"-i {input.Escape()} -fflags +bitexact -flags:v +bitexact -flags:a +bitexact -acodec \"pcm_s16le\" -ac 1 -filter_complex \"channelsplit = channel_layout = stereo[l][r]\" -map \"[l]\" {output.Escape()}\\{fileName}_l.wav -acodec \"pcm_s16le\" -ac 1 -fflags +bitexact -flags:v +bitexact -flags:a +bitexact -map \"[r]\" {output.Escape()}\\{fileName}_r.wav";
+            $"-i {input.Escape()} -fflags +bitexact -flags:v +bitexact -flags:a +bitexact -acodec \"pcm_s16le\" -ac 1 -filter_complex \"channelsplit = channel_layout = stereo[l][r]\" -map \"[l]\" {output.Escape()}\\{fileName}_l.wav -acodec \"pcm_s16le\" -ac 1 -fflags +bitexact -flags:v +bitexact -flags:a +bitexact -map \"[r]\" {output.Escape()}\\{fileName}_r.wav";
         await FFmpeg.Conversions.New().Start(args);
     }
 
@@ -85,7 +86,7 @@ internal class FFMPEG
     }
 }
 
-internal class Util
+public class Util
 {
     public static string CustomTrimmer(string input)
     {
@@ -95,8 +96,18 @@ internal class Util
     public static IDictionary<string, string> GetValues(object obj)
     {
         return obj
-          .GetType()
-          .GetProperties()
-          .ToDictionary(p => p.Name, p => p.GetValue(obj).ToString());
+            .GetType()
+            .GetProperties()
+            .ToDictionary(p => p.Name, p => p.GetValue(obj).ToString());
+    }
+
+    public static Value CreateValue(string val)
+    {
+        return new Value {value = val};
+    }
+
+    public class Value
+    {
+        [XmlAttribute] public string value { get; set; }
     }
 }

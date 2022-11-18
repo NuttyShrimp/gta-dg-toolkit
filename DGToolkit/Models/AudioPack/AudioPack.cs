@@ -1,14 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace DGToolkit.Models.AudioPack;
 
-namespace DGToolkit.Models.AudioPack
+struct State
 {
-    class AudioPack
+    public Manifest manifest;
+}
+
+class AudioPack
+{
+    private State state;
+    private Parser manifestParser;
+
+    public AudioPack()
     {
-        public void Load() { }
-        public void Save() { }
+        manifestParser = new Parser();
+    }
+
+    public void Load()
+    {
+        //Load info from manifest
+        state = new State()
+        {
+            manifest = manifestParser.ImportManifest(),
+        };
+    }
+
+    public void Save()
+    {
     }
 }

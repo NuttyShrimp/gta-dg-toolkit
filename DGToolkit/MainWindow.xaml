@@ -5,23 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DGToolkit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal"
-        TextOptions.TextRenderingMode="Auto"
-        Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{DynamicResource MaterialDesignFont}">
+        Title="MainWindow" Height="720" Width="1280">
     <Grid>
         <StackPanel>
             <TabControl>
                 <TabItem Header="Audio Pack">
-                    <Frame Source="/Views/AudioPack.xaml"  />
+                    <Frame Source="/Views/AudioPack.xaml" />
                 </TabItem>
                 <TabItem Header="Vehicles">
-                    <Frame Source="/Views/Vehicles/VehicleWrapper.xaml"  />
+                    <Frame Source="/Views/Vehicles/VehicleWrapper.xaml" />
                 </TabItem>
             </TabControl>
         </StackPanel>
