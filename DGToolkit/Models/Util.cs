@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Xml;
 using System.Xml.Serialization;
 using Xabe.FFmpeg;
@@ -109,5 +110,12 @@ public class Util
     public class Value
     {
         [XmlAttribute] public string value { get; set; }
+    }
+
+    public static Regex numReg = new Regex("[0-9]+");
+
+    public static void NumberInputText(object _, TextCompositionEventArgs e)
+    {
+        e.Handled = !numReg.IsMatch(e.Text);
     }
 }

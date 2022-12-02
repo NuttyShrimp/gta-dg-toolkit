@@ -1,16 +1,18 @@
-﻿namespace DGToolkit.Models.AudioPack;
+﻿using System.Collections.Generic;
+
+namespace DGToolkit.Models.AudioPack;
 
 struct State
 {
     public Manifest manifest;
 }
 
-class AudioPack
+class AudioPacks
 {
-    private State state;
+    public State state;
     private Parser manifestParser;
 
-    public AudioPack()
+    public AudioPacks()
     {
         manifestParser = new Parser();
     }
@@ -26,5 +28,6 @@ class AudioPack
 
     public void Save()
     {
+        manifestParser.WriteManifest(state.manifest);
     }
 }

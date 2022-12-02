@@ -1,0 +1,36 @@
+﻿<Page x:Class="DGToolkit.Views.AudioPackView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:DGToolkit.Views"
+      xmlns:dat54="clr-namespace:DGToolkit.Models.AudioPack.Dat54"
+      mc:Ignorable="d"
+      d:DesignHeight="700" d:DesignWidth="1280"
+      Title="AudioPackView">
+    <StackPanel>
+        <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Button Margin="10, 10, 0, 0" Background="DarkRed" Foreground="white" Click="ResetPacks">Reset</Button>
+            <Button Margin="10, 10, 0, 0" Click="SavePack" Content="Save" ToolTip="Write changes to file" />
+            <ComboBox Margin="10, 10, 0, 0" Name="DLCPackName" IsReadOnly="True" ItemsSource="{Binding}"
+                      Text="DLC Pack" SelectionChanged="LoadPack" />
+        </WrapPanel>
+        <Separator Visibility="Hidden"></Separator>
+        <DataGrid Height="650" Margin="10,0,10,0" Name="AudioEntries"
+                  HorizontalAlignment="Stretch" ItemsSource="{Binding }" CanUserAddRows="True" IsReadOnly="False"
+                  CanUserDeleteRows="True" AddingNewItem="AudioEntries_OnAddingNewItem" CanUserSortColumns="True"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding name}" />
+                <DataGridCheckBoxColumn Header="Looped" Binding="{Binding looped}" />
+                <DataGridTemplateColumn Header="Header">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="OpenHeaderDialog">Change Headers</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
+</Page>

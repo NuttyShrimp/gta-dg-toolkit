@@ -1,0 +1,72 @@
+﻿<Window x:Class="DGToolkit.Views.AudioPack.HeaderDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dat54="clr-namespace:DGToolkit.Models.AudioPack.Dat54"
+        MinHeight="200"
+        MinWidth="300"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        mc:Ignorable="d"
+        Title="HeaderDialog" Height="220" Width="300" DataContext="{Binding baseSoundHeader }">
+    <Grid Margin="10">
+        <Grid.Resources>
+            <Style TargetType="{x:Type Label}">
+                <Setter Property="Margin" Value="0,3,5,5" />
+                <Setter Property="Padding" Value="0,0,0,5" />
+            </Style>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="Margin" Value="0,0,0,5" />
+            </Style>
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="Width" Value="70" />
+                <Setter Property="Height" Value="25" />
+                <Setter Property="Margin" Value="5,0,0,0" />
+            </Style>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Grid.Column="0">Volume</Label>
+        <TextBox Grid.Column="1" PreviewTextInput="NumberInputText" Text="{Binding volume}" />
+
+        <Label Grid.Row="1" Grid.Column="0">Distance</Label>
+        <TextBox Grid.Row="1" Grid.Column="1" PreviewTextInput="NumberInputText" Text="{Binding distance}" />
+
+        <Label Grid.Row="2" Grid.Column="0">Doppler Factor</Label>
+        <TextBox Grid.Row="2" Grid.Column="1" PreviewTextInput="Nax1NumberInput" Text="{Binding dopplerFactor}" />
+
+        <Label Grid.Row="3" Grid.Column="0">Category Hash</Label>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding categoryHash}" />
+
+        <Label Grid.Row="4" Grid.Column="0">Rolloff Hash</Label>
+        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Path=rolloffHash}" />
+
+        <Label Grid.Row="5" Grid.Column="0">Echo</Label>
+        <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBox PreviewTextInput="Nax1NumberInput" Width="60" Text="{Binding echox}" />
+            <TextBox PreviewTextInput="Nax1NumberInput" Width="60" Text="{Binding echoy}" />
+            <TextBox PreviewTextInput="Nax1NumberInput" Width="60" Text="{Binding echoz}" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Click="CancelInput">Cancel</Button>
+            <Button Click="OkInput">Save</Button>
+        </StackPanel>
+    </Grid>
+</Window>

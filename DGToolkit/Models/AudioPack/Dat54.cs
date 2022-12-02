@@ -1,10 +1,11 @@
-﻿using System.Xml.Serialization;
+﻿using System.ComponentModel;
+using System.Xml.Serialization;
 using static DGToolkit.Models.Util.Util;
 
 
 namespace DGToolkit.Models.AudioPack.Dat54
 {
-    public class baseSoundHeader
+    public class baseSoundHeader: IEditableObject
     {
         public int volume { get; set; }
         public int dopplerFactor { get; set; }
@@ -14,6 +15,26 @@ namespace DGToolkit.Models.AudioPack.Dat54
         public int echox { get; set; }
         public int echoy { get; set; }
         public int echoz { get; set; }
+
+        public baseSoundHeader Copy()
+        {
+            return (baseSoundHeader) this.MemberwiseClone();
+        }
+
+        public void BeginEdit()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void CancelEdit()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void EndEdit()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     public static class SoundHeaderValues
