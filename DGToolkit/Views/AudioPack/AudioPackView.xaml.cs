@@ -42,9 +42,9 @@ namespace DGToolkit.Views
             packNames = new ObservableCollection<AudioPackName>();
             LoadPackNames();
             DLCPackName.DataContext = packNames;
-            if (packNames.Count() != 0)
+            if (packNames.Count != 0)
             {
-                DLCPackName.SelectedValue = _packs.state.manifest.packNames[0];
+                DLCPackName.SelectedValue = packNames[0];
             }
         }
 
@@ -69,7 +69,8 @@ namespace DGToolkit.Views
                 return;
             }
 
-            AudioEntries.DataContext = _packs.state.manifest.GetPackInfo((string) DLCPackName.SelectedValue).files;
+            AudioPackName selName = (AudioPackName) DLCPackName.SelectedValue;
+            AudioEntries.DataContext = _packs.state.manifest.GetPackInfo(selName.Name).files;
         }
 
         private void ResetPacks(object sender, RoutedEventArgs e)
@@ -91,11 +92,21 @@ namespace DGToolkit.Views
             _packs.Save();
         }
 
-        private void GeneratePacks(object sender, RoutedEventArgs e)
+        private async void GeneratePacks(object sender, RoutedEventArgs e)
         {
             (sender as Button).IsEnabled = false;
-            _packs.GeneratePacks();
-            (sender as Button).IsEnabled = true;
+            var pDialog = new ProgressDialog(_packs.logStore);
+
+            async Task Work()
+            {
+                await _packs.GeneratePacks();
+                pDialog.Finish();
+                (sender as Button).IsEnabled = true;
+            }
+
+            var work = Work();
+            pDialog.ShowDialog();
+            await work;
         }
 
         private void OpenHeaderDialog(object sender, RoutedEventArgs e)

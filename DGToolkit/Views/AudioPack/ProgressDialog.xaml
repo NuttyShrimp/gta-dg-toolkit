@@ -1,0 +1,21 @@
+﻿<Window x:Class="DGToolkit.Views.AudioPack.ProgressDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:DGToolkit.Views.AudioPack"
+        mc:Ignorable="d"
+        Title="ProgressDialog" Height="350" Width="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition MaxHeight="310"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0">
+            <TextBlock Name="progressText" Text="{Binding}"></TextBlock>
+        </ScrollViewer>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Right" Margin="00,10,10,0">
+            <Button Name="closeBtn" Click="onCloseBtnClick" IsEnabled="False">Close</Button>
+        </StackPanel>
+    </Grid>
+</Window>

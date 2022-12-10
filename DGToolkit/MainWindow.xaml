@@ -10,7 +10,7 @@
         <StackPanel>
             <TabControl>
                 <TabItem Header="Audio Pack">
-                    <Frame Source="/Views/AudioPackView.xaml" />
+                    <Frame Source="/Views/AudioPack/AudioPackView.xaml" />
                 </TabItem>
                 <TabItem Header="Vehicles">
                     <Frame Source="/Views/Vehicles/VehicleWrapper.xaml" />

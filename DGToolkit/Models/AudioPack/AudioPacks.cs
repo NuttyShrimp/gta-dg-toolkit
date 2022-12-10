@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Xml;
 using CodeWalker.GameFiles;
 using DGToolkit.Models.Util;
+using DGToolkit.Views.AudioPack;
+using Xabe.FFmpeg.Downloader;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
 
@@ -24,11 +28,13 @@ struct State
 class AudioPacks
 {
     public State state;
+    public LogStore logStore;
     private Parser manifestParser;
 
     public AudioPacks()
     {
         manifestParser = new Parser();
+        logStore = new LogStore();
     }
 
     private void CreateDlcStructure(string entryName)
@@ -77,20 +83,23 @@ class AudioPacks
 
         await ffmpeg.ConvertFile(Path.Combine(inputInfo.DirectoryName, Path.GetFileName(inputPath)),
             tmpInfo.FullName);
+        Debug.WriteLine("Converted file");
         return await ffmpeg.GetFilteredInfo(Path.Combine(tmpInfo.FullName,
             $"{Util.Util.CustomTrimmer(Path.GetFileNameWithoutExtension(inputPath))}_l.wav"));
     }
 
 
-    private async Task<bool> GenerateAwcFile(DLCEntry entry)
+    private async Task<bool> GenerateAwcFile(DLCEntry entry, Action<string> addLog)
     {
         // Entry.name --> dlc_dlcName_entryName
         CreateDlcStructure(entry.name);
         // Convert audio to wav
+        // TODO: Implement a TaskScheduler
         foreach (var file in entry.files)
         {
-            // TODO: add more debug logs
+            addLog($"Starting audio conversion of {file.name}");
             var audioInfo = await ConvertAudioFile(Path.Combine(state.manifest.dataPath, entry.name, file.name));
+            addLog($"Finished audio conversion of {file.name}");
             file.samples = audioInfo.samples;
             file.sampleRate = audioInfo.samplerate;
         }
@@ -167,37 +176,44 @@ class AudioPacks
         manifestParser.WriteManifest(state.manifest);
     }
 
-    public void GeneratePacks()
+    public async Task GeneratePacks()
     {
-        // TODO: dialog with progress
+        using var folderDialog = new FolderBrowserDialog
+        {
+            Description = "Select an output folder",
+            UseDescriptionForTitle = true,
+            SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)
+                           + Path.DirectorySeparatorChar,
+            ShowNewFolderButton = true
+        };
+
+        if (folderDialog.ShowDialog() != DialogResult.OK)
+        {
+            return;
+        }
+        
+        state.manifest.outputPath = folderDialog.SelectedPath;
+        logStore.AddLogEntry("Setting output path to " + state.manifest.outputPath);
+
+        logStore.AddLogEntry("Downloading ffmpeg");
+        await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Official);
+        logStore.AddLogEntry("Finished downloading ffmpeg");
+
         foreach (var entry in state.manifest.data)
         {
-            using var dialog = new FolderBrowserDialog
-            {
-                Description = "Select an output folder",
-                UseDescriptionForTitle = true,
-                SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)
-                               + Path.DirectorySeparatorChar,
-                ShowNewFolderButton = true
-            };
-
-            if (dialog.ShowDialog() != DialogResult.OK)
-            {
-                return;
-            }
-
-            state.manifest.outputPath = dialog.SelectedPath;
-
             try
             {
-                Task<bool> awcTask = GenerateAwcFile(entry);
-                awcTask.Wait();
-                if (awcTask.Result)
+                logStore.AddLogEntry($"Generating DLC pack: {entry.name}");
+                logStore.AddLogEntry("Started AWC generation");
+                bool oversized = await GenerateAwcFile(entry, logStore.AddLogEntry);
+                if (oversized)
                 {
                     state.oversized.Add(entry.name);
                 }
 
+                logStore.AddLogEntry("Started Dat54 generation");
                 GenerateDatFile(entry);
+                logStore.AddLogEntry("Started nametable generation");
                 GenerateNameTable(entry);
             }
             catch (Exception e)
@@ -207,6 +223,8 @@ class AudioPacks
                 Application.Current.Shutdown();
             }
         }
+
+        logStore.AddLogEntry("Finished pack generation");
     }
 
     public void AddPack(string name)

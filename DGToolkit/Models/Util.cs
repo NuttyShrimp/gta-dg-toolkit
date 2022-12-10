@@ -49,11 +49,6 @@ internal class Xml
 
 internal class FFMPEG
 {
-    internal FFMPEG()
-    {
-        FFmpeg.SetExecutablesPath(Path.Combine(AppContext.BaseDirectory, "./Data"));
-    }
-
     /// <summary>
     ///   Wrapper for FFmpeg conversion
     /// </summary>

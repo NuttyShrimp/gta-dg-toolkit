@@ -43,7 +43,7 @@ public class BaseSoundHeader : IEditableObject
     }
 }
 
-internal class File
+public class File
 {
     public static class SoundHeaderValues
     {
