@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using DGToolkit.Models.AudioPack.Dat54;
 using Newtonsoft.Json;
+using File = System.IO.File;
 
 namespace DGToolkit.Models.AudioPack
 {
@@ -13,7 +14,7 @@ namespace DGToolkit.Models.AudioPack
     {
         public string name { get; set; }
         public bool looped { get; set; }
-        public baseSoundHeader headers { get; set; }
+        public Dat54.BaseSoundHeader headers { get; set; }
         public double samples { get; set; }
         public double sampleRate { get; set; }
     }

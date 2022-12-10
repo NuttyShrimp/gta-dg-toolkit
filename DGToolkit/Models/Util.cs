@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -50,7 +51,7 @@ internal class FFMPEG
 {
     internal FFMPEG()
     {
-        FFmpeg.SetExecutablesPath(Path.Combine(AppContext.BaseDirectory, "../Data"));
+        FFmpeg.SetExecutablesPath(Path.Combine(AppContext.BaseDirectory, "./Data"));
     }
 
     /// <summary>
@@ -58,7 +59,7 @@ internal class FFMPEG
     /// </summary>
     /// <param name="input">Path to file WITHOUT ext</param>
     /// <param name="output">String to dir where converted files need to go</param>
-    public static async Task ConvertFile(string input, string output)
+    public async Task ConvertFile(string input, string output)
     {
         // Strip name from input file
         var fileName = Util.CustomTrimmer(Path.GetFileNameWithoutExtension(input));
@@ -67,7 +68,7 @@ internal class FFMPEG
         await FFmpeg.Conversions.New().Start(args);
     }
 
-    public static async Task<AudioInfo> GetFilteredInfo(string path)
+    public async Task<AudioInfo> GetFilteredInfo(string path)
     {
         var mediaInfo = await FFmpeg.GetMediaInfo(path);
         var sampleRate = mediaInfo.AudioStreams.First().SampleRate;

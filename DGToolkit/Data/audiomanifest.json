@@ -10,112 +10,165 @@
           "looped": true,
           "headers": {
             "volume": 100,
-            "distance": 15,
             "dopplerFactor": 0,
             "categoryHash": "02C7B342",
-            "rolloffHash": "C2770146"
-          }
+            "rolloffHash": "C2770146",
+            "distance": 15,
+            "echox": 0,
+            "echoy": 0,
+            "echoz": 0
+          },
+          "samples": 0.0,
+          "sampleRate": 0.0
         },
         {
           "name": "phone_ringtone.mp3",
           "looped": true,
           "headers": {
             "volume": 100,
-            "distance": 15,
             "dopplerFactor": 0,
             "categoryHash": "02C7B342",
-            "rolloffHash": "C2770146"
-          }
+            "rolloffHash": "C2770146",
+            "distance": 15,
+            "echox": 0,
+            "echoy": 0,
+            "echoz": 0
+          },
+          "samples": 0.0,
+          "sampleRate": 0.0
         },
         {
           "name": "lowfuel.mp3",
           "looped": false,
           "headers": {
             "volume": 100,
-            "distance": 5,
             "dopplerFactor": 0,
             "categoryHash": "02C7B342",
-            "rolloffHash": "C2770146"
-          }
+            "rolloffHash": "C2770146",
+            "distance": 5,
+            "echox": 0,
+            "echoy": 0,
+            "echoz": 0
+          },
+          "samples": 0.0,
+          "sampleRate": 0.0
         },
         {
           "name": "car_lock.mp3",
           "looped": false,
           "headers": {
             "volume": 100,
-            "distance": 30,
             "dopplerFactor": 0,
             "categoryHash": "02C7B342",
-            "rolloffHash": "C2770146"
-          }
+            "rolloffHash": "C2770146",
+            "distance": 30,
+            "echox": 0,
+            "echoy": 0,
+            "echoz": 0
+          },
+          "samples": 0.0,
+          "sampleRate": 0.0
         },
         {
           "name": "car_unlock.mp3",
           "looped": false,
           "headers": {
             "volume": 100,
-            "distance": 30,
             "dopplerFactor": 0,
             "categoryHash": "02C7B342",
-            "rolloffHash": "C2770146"
-          }
+            "rolloffHash": "C2770146",
+            "distance": 30,
+            "echox": 0,
+            "echoy": 0,
+            "echoz": 0
+          },
+          "samples": 0.0,
+          "sampleRate": 0.0
         },
         {
           "name": "error_sound.ogg",
           "looped": false,
           "headers": {
             "volume": 100,
-            "distance": 5,
             "dopplerFactor": 0,
             "categoryHash": "02C7B342",
-            "rolloffHash": "C2770146"
-          }
+            "rolloffHash": "C2770146",
+            "distance": 5,
+            "echox": 0,
+            "echoy": 0,
+            "echoz": 0
+          },
+          "samples": 0.0,
+          "sampleRate": 0.0
         },
         {
           "name": "nospurge.ogg",
           "looped": false,
           "headers": {
             "volume": 100,
-            "distance": 5,
             "dopplerFactor": 0,
             "categoryHash": "02C7B342",
-            "rolloffHash": "C2770146"
-          }
+            "rolloffHash": "C2770146",
+            "distance": 5,
+            "echox": 0,
+            "echoy": 0,
+            "echoz": 0
+          },
+          "samples": 0.0,
+          "sampleRate": 0.0
         },
         {
           "name": "cuff.ogg",
           "looped": false,
           "headers": {
             "volume": 100,
-            "distance": 15,
             "dopplerFactor": 0,
             "categoryHash": "02C7B342",
-            "rolloffHash": "C2770146"
-          }
+            "rolloffHash": "C2770146",
+            "distance": 15,
+            "echox": 0,
+            "echoy": 0,
+            "echoz": 0
+          },
+          "samples": 0.0,
+          "sampleRate": 0.0
         },
         {
           "name": "uncuff.ogg",
           "looped": false,
           "headers": {
             "volume": 100,
-            "distance": 15,
             "dopplerFactor": 0,
             "categoryHash": "02C7B342",
-            "rolloffHash": "C2770146"
-          }
+            "rolloffHash": "C2770146",
+            "distance": 15,
+            "echox": 0,
+            "echoy": 0,
+            "echoz": 0
+          },
+          "samples": 0.0,
+          "sampleRate": 0.0
         },
         {
           "name": "emergency.ogg",
           "looped": false,
           "headers": {
             "volume": 100,
-            "distance": 25,
             "dopplerFactor": 0,
             "categoryHash": "02C7B342",
-            "rolloffHash": "C2770146"
-          }
+            "rolloffHash": "C2770146",
+            "distance": 25,
+            "echox": 0,
+            "echoy": 0,
+            "echoz": 0
+          },
+          "samples": 0.0,
+          "sampleRate": 0.0
         }
       ]
     }
+  ],
+  "packNames": [
+    "Sounds"
   ]
 }

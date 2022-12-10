@@ -8,8 +8,8 @@ namespace DGToolkit.Views.AudioPack;
 
 public partial class HeaderDialog : Window
 {
-    public baseSoundHeader? returnHeaders = null;
-    public HeaderDialog(baseSoundHeader header)
+    public BaseSoundHeader? returnHeaders = null;
+    public HeaderDialog(BaseSoundHeader header)
     {
         InitializeComponent();
         DataContext = header;
@@ -41,7 +41,7 @@ public partial class HeaderDialog : Window
     private void OkInput(object sender, RoutedEventArgs e)
     {
         DialogResult = true;
-        returnHeaders = (baseSoundHeader)DataContext;
+        returnHeaders = (BaseSoundHeader)DataContext;
         this.Close();
     }
 }

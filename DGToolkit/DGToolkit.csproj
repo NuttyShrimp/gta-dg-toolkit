@@ -1,47 +1,57 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<OutputType>WinExe</OutputType>
-		<TargetFramework>net6.0-windows</TargetFramework>
-		<Nullable>enable</Nullable>
-		<UseWPF>true</UseWPF>
-	</PropertyGroup>
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+        <UseWindowsForms>true</UseWindowsForms>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="ShowMeTheXAML.MSBuild" Version="2.0.0" />
-		<PackageReference Include="Xabe.FFmpeg" Version="5.2.0" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="ShowMeTheXAML.MSBuild" Version="2.0.0" />
+        <PackageReference Include="Xabe.FFmpeg" Version="5.2.0" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<Reference Include="CodeWalker.Core">
-			<HintPath>Lib\CodeWalker.Core.dll</HintPath>
-		</Reference>
-		<Reference Include="SharpDX">
-			<HintPath>Lib\SharpDX.dll</HintPath>
-		</Reference>
-		<Reference Include="SharpDX.D3DCompiler">
-			<HintPath>Lib\SharpDX.D3DCompiler.dll</HintPath>
-		</Reference>
-		<Reference Include="SharpDX.Direct2D1">
-			<HintPath>Lib\SharpDX.Direct2D1.dll</HintPath>
-		</Reference>
-		<Reference Include="SharpDX.Direct3D11">
-			<HintPath>Lib\SharpDX.Direct3D11.dll</HintPath>
-		</Reference>
-		<Reference Include="SharpDX.DXGI">
-			<HintPath>Lib\SharpDX.DXGI.dll</HintPath>
-		</Reference>
-		<Reference Include="SharpDX.Mathematics">
-			<HintPath>Lib\SharpDX.Mathematics.dll</HintPath>
-		</Reference>
-		<Reference Include="SharpDX.XAudio2">
-			<HintPath>Lib\SharpDX.XAudio2.dll</HintPath>
-		</Reference>
-		<Reference Include="SharpDX.XInput">
-			<HintPath>Lib\SharpDX.XInput.dll</HintPath>
-		</Reference>
-	</ItemGroup>
+    <ItemGroup>
+        <Reference Include="CodeWalker.Core">
+            <HintPath>Lib\CodeWalker.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="SharpDX">
+            <HintPath>Lib\SharpDX.dll</HintPath>
+        </Reference>
+        <Reference Include="SharpDX.D3DCompiler">
+            <HintPath>Lib\SharpDX.D3DCompiler.dll</HintPath>
+        </Reference>
+        <Reference Include="SharpDX.Direct2D1">
+            <HintPath>Lib\SharpDX.Direct2D1.dll</HintPath>
+        </Reference>
+        <Reference Include="SharpDX.Direct3D11">
+            <HintPath>Lib\SharpDX.Direct3D11.dll</HintPath>
+        </Reference>
+        <Reference Include="SharpDX.DXGI">
+            <HintPath>Lib\SharpDX.DXGI.dll</HintPath>
+        </Reference>
+        <Reference Include="SharpDX.Mathematics">
+            <HintPath>Lib\SharpDX.Mathematics.dll</HintPath>
+        </Reference>
+        <Reference Include="SharpDX.XAudio2">
+            <HintPath>Lib\SharpDX.XAudio2.dll</HintPath>
+        </Reference>
+        <Reference Include="SharpDX.XInput">
+            <HintPath>Lib\SharpDX.XInput.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Data\ffmpeg.exe">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Data\ffprobe.exe">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
 
 
 </Project>

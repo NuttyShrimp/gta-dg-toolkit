@@ -11,9 +11,26 @@
     <StackPanel>
         <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top">
             <Button Margin="10, 10, 0, 0" Background="DarkRed" Foreground="white" Click="ResetPacks">Reset</Button>
-            <Button Margin="10, 10, 0, 0" Click="SavePack" Content="Save" ToolTip="Write changes to file" />
-            <ComboBox Margin="10, 10, 0, 0" Name="DLCPackName" IsReadOnly="True" ItemsSource="{Binding}"
-                      Text="DLC Pack" SelectionChanged="LoadPack" />
+            <Button Margin="10, 10, 0, 0" Click="SavePack" Content="Save" ToolTip="Write changes to the manifest" />
+            <Button Margin="10, 10, 0, 0" Click="GeneratePacks" Content="Generate" ToolTip="Generate files to stream" />
+            <ComboBox Margin="10, 10, 0, 0" Name="DLCPackName" IsReadOnly="True" ItemsSource="{Binding Path=packNames}"
+                      Text="DLC Pack" SelectionChanged="LoadPack">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Path=Name}" Foreground="{Binding}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+                <!-- <ComboBox.ItemContainerStyle> -->
+                <!--     <Style> -->
+                <!--         <Style.Triggers> -->
+                <!--             <DataTrigger Binding="{Binding Oversized}" Value="True" > -->
+                <!--                 <Setter Property="Foreground" Value="Color" /> -->
+                <!--             </DataTrigger> -->
+                <!--         </Style.Triggers> -->
+                <!--     </Style> -->
+                <!-- </ComboBox.ItemContainerStyle> -->
+            </ComboBox>
+            <Button Margin="10, 10, 0 0" Click="CreatNewPackClick">Add New AudioPack</Button>
         </WrapPanel>
         <Separator Visibility="Hidden"></Separator>
         <DataGrid Height="650" Margin="10,0,10,0" Name="AudioEntries"
