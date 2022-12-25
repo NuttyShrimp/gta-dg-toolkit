@@ -48,10 +48,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Views\AudioOcclusion" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Page Update="Views\AudioPack\AudioPackView.xaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>

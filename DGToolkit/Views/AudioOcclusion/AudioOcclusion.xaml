@@ -1,0 +1,51 @@
+﻿<Page x:Class="DGToolkit.Views.AudioOcclusion.AudioOcclusion"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:DGToolkit.Views.AudioOcclusion"
+      mc:Ignorable="d"
+      d:DesignHeight="660" d:DesignWidth="1280"
+      Title="AudioOcclusion">
+    <StackPanel Margin="10" Orientation="Horizontal">
+        <StackPanel Width="300">
+            <Label>Interiors</Label>
+            <ListBox SelectionMode="Single" ItemsSource="{Binding}" Name="InteriorList"
+                     Height="590">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Path=name}"></TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <StackPanel Margin="0 4 0 0" HorizontalAlignment="Left">
+                <Button Click="CreateInteriorEntryClick">Add</Button>
+            </StackPanel>
+        </StackPanel>
+        <Grid Margin="10 0 0 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="25" />
+            </Grid.RowDefinitions>
+            <TabControl Grid.Row="0" Width="950">
+                <TabItem Header="Settings">
+                    <Frame Source="Settings.xaml" Name="SettingsFrame"/>
+                </TabItem>
+                <TabItem Header="Paths">
+                    <Grid Background="#FFE5E5E5" />
+                </TabItem>
+                <TabItem Header="Rooms">
+                    <Grid Background="#FFE5E5E5" />
+                </TabItem>
+                <TabItem Header="Portals">
+                    <Grid Background="#FFE5E5E5" />
+                </TabItem>
+            </TabControl>
+            <StackPanel Grid.Row="1" Margin="0 4 0 0" HorizontalAlignment="Left" Orientation="Horizontal">
+                <Button Click="ResetButtonClick">Reset</Button>
+                <Button Margin="10 0 0 0" Click="SaveButtonClick">Save</Button>
+                <Button Margin="10 0 0 0" Click="CreateInteriorEntryClick">Generate</Button>
+            </StackPanel>
+        </Grid>
+    </StackPanel>
+</Page>

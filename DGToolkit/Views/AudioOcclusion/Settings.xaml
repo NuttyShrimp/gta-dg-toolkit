@@ -1,0 +1,30 @@
+﻿<Page x:Class="DGToolkit.Views.AudioOcclusion.Settings"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:DGToolkit.Views.AudioOcclusion"
+      mc:Ignorable="d"
+      Title="Settings" Height="450" Width="800">
+    <StackPanel Margin="50 50 0 0">
+        <StackPanel Orientation="Horizontal">
+            <Label Width="100">Assets Root Path</Label>
+            <TextBox Width="300" Name="ResourcePath"></TextBox>
+            <Button Width="80" Margin="10 0 0 0" Click="SelectResourcePathClick">Select Folder</Button>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
+            <Label Width="100">Name</Label>
+            <TextBox Width="300" Name="InteriorName" Text="{Binding }"></TextBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
+            <Label Width="100">Ymap Path</Label>
+            <TextBox Width="300" Name="InteriorYmap" Text="{Binding }"></TextBox>
+            <Button Width="80" Margin="10 0 0 0">Select File</Button>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
+            <Label Width="100">Ytyp Path</Label>
+            <TextBox Width="300" Name="InteriorYtyp" Text="{Binding }"></TextBox>
+            <Button Width="80" Margin="10 0 0 0">Select File</Button>
+        </StackPanel>
+    </StackPanel>
+</Page>
