@@ -1,4 +1,65 @@
-﻿{
-  "assetsPath": "",
-  "interiors": []
+{
+  "assetsPath": "C:\\Users\\janle\\Documents\\projects\\git\\degrens\\dg_2\\resources\\[assets]",
+  "interiors": [
+    {
+      "name": "Drug lab",
+      "ymapPath": "asset_labs\\stream\\stock_1\\int_stock_milo_.ymap",
+      "ytypPath": "asset_labs\\stream\\stock_1\\int_stock.ytyp",
+      "paths": {
+        "0": [
+          1
+        ],
+        "1": [
+          0,
+          2,
+          3
+        ],
+        "2": [
+          1,
+          3
+        ],
+        "3": [
+          2,
+          1,
+          4
+        ],
+        "4": [
+          3
+        ]
+      },
+      "rooms": [
+        {
+          "roomIndex": 0,
+          "name": "limbo",
+          "reverb": 0.0,
+          "echo": 0.0
+        },
+        {
+          "roomIndex": 1,
+          "name": "room1",
+          "reverb": 0.0,
+          "echo": 0.0
+        },
+        {
+          "roomIndex": 2,
+          "name": "room2",
+          "reverb": 0.1,
+          "echo": 0.0
+        },
+        {
+          "roomIndex": 3,
+          "name": "room3",
+          "reverb": 0.1,
+          "echo": 0.0
+        },
+        {
+          "roomIndex": 4,
+          "name": "room4",
+          "reverb": 0.4,
+          "echo": 0.1
+        }
+      ],
+      "portals": []
+    }
+  ]
 }

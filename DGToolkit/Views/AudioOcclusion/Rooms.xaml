@@ -1,0 +1,21 @@
+﻿<Page x:Class="DGToolkit.Views.AudioOcclusion.Rooms"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:DGToolkit.Views.AudioOcclusion"
+      mc:Ignorable="d"
+      Title="Rooms" Height="590" Width="890">
+    <StackPanel Margin="10 10 10 10">
+        <DataGrid Name="AudioRooms" HorizontalAlignment="Stretch" ItemsSource="{Binding }" CanUserAddRows="False"
+                  IsReadOnly="False" CanUserDeleteRows="False" CanUserSortColumns="False" AutoGenerateColumns="False"
+                  Width="870" Height="570" MinColumnWidth="40">
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="*" Header="Room Index" Binding="{Binding roomIndex}" IsReadOnly="True"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Name" Binding="{Binding name}" IsReadOnly="True"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Reverb" Binding="{Binding reverb}" IsReadOnly="False"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Echo" Binding="{Binding echo}" IsReadOnly="False"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
+</Page>

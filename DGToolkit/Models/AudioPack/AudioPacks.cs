@@ -83,7 +83,6 @@ class AudioPacks
 
         await ffmpeg.ConvertFile(Path.Combine(inputInfo.DirectoryName, Path.GetFileName(inputPath)),
             tmpInfo.FullName);
-        Debug.WriteLine("Converted file");
         return await ffmpeg.GetFilteredInfo(Path.Combine(tmpInfo.FullName,
             $"{Util.Util.CustomTrimmer(Path.GetFileNameWithoutExtension(inputPath))}_l.wav"));
     }

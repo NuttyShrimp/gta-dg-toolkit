@@ -18,7 +18,6 @@ public class LogStore
 
     public void AddLogEntry(string entry)
     {
-        Debug.WriteLine(entry);
         log += entry + "\n";
         LogChanged(this, new LogChangedEventArgs(log));
     }

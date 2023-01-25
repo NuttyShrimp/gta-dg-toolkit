@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using Newtonsoft.Json;
@@ -8,17 +10,23 @@ namespace DGToolkit.Models.AudioOcclusion;
 
 public class InteriorRoom
 {
-    public string? roomIndex { get; set; }
+    public int? roomIndex { get; set; }
+    public string? name { get; set; }
     public float? reverb { get; set; }
     public float? echo { get; set; }
 }
 
 public class InteriorPortal
 {
+    // Index in entity array (attachedObjects)
+    public int entityIdx { get; set; }
+    // What we should use in the ymt for portalIdx (it is the idx in lists of portals where the srcRoomIdx is the same)
+    public int portalRoomIdx { get; set; }
+    public Int32? entityHash { get; set; }
     public int? portalId { get; set; }
     public int? srcRoomIdx { get; set; }
     public int? destRoomIdx { get; set; }
-    public float? maxOccl { get; set; }
+    public double? maxOccl { get; set; }
     public bool? isDoor { get; set; }
     public bool? isGlass { get; set; }
 }
@@ -29,10 +37,13 @@ public class InteriorEntry
     public int? index { get; set; }
     public string? name { get; set; }
     public string? ymapPath { get; set; }
+
     public string? ytypPath { get; set; }
-    public Dictionary<int, int>? paths { get; set; }
-    public List<InteriorRoom> rooms { get; set; }
-    public List<InteriorPortal> portals { get; set; }
+
+    // From room -> occlusion to listed rooms
+    public Dictionary<int, HashSet<int>>? paths { get; set; }
+    public ObservableCollection<InteriorRoom> rooms { get; set; }
+    public ObservableCollection<InteriorPortal> portals { get; set; }
 
     public bool ShouldSerializeindex()
     {
@@ -44,11 +55,11 @@ public class InteriorEntry
         var entry = (InteriorEntry) MemberwiseClone();
         if (entry.paths != null)
         {
-            entry.paths = new Dictionary<int, int>(paths);
+            entry.paths = new Dictionary<int, HashSet<int>>(paths);
         }
 
-        entry.rooms = new List<InteriorRoom>(rooms);
-        entry.portals = new List<InteriorPortal>(portals);
+        entry.rooms = new ObservableCollection<InteriorRoom>(rooms);
+        entry.portals = new ObservableCollection<InteriorPortal>(portals);
         return entry;
     }
 }
@@ -57,7 +68,7 @@ public class Manifest
 {
     // Path to [assets] folder in resources folder
     public string? assetsPath { get; set; }
-    public List<InteriorEntry> interiors { get; set; }
+    public ObservableCollection<InteriorEntry> interiors { get; set; }
 }
 
 public class Parser
@@ -96,11 +107,10 @@ public class Parser
         }
 
         int idx = 0;
-        manifest.interiors = manifest.interiors.ConvertAll(i =>
+        foreach (var interiorEntry in manifest.interiors)
         {
-            i.index = idx++;
-            return i;
-        });
+            interiorEntry.index = idx++;
+        }
 
         return manifest;
     }

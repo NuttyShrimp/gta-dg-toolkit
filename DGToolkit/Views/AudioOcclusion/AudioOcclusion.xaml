@@ -11,7 +11,7 @@
         <StackPanel Width="300">
             <Label>Interiors</Label>
             <ListBox SelectionMode="Single" ItemsSource="{Binding}" Name="InteriorList"
-                     Height="590">
+                     Height="590" SelectionChanged="InteriorList_OnSelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Path=name}"></TextBlock>
@@ -32,13 +32,13 @@
                     <Frame Source="Settings.xaml" Name="SettingsFrame"/>
                 </TabItem>
                 <TabItem Header="Paths">
-                    <Grid Background="#FFE5E5E5" />
+                    <Frame Source="Paths.xaml" Name="PathsFrame"/>
                 </TabItem>
                 <TabItem Header="Rooms">
-                    <Grid Background="#FFE5E5E5" />
+                    <Frame Source="Rooms.xaml" Name="RoomsFrame"/>
                 </TabItem>
                 <TabItem Header="Portals">
-                    <Grid Background="#FFE5E5E5" />
+                    <Frame Source="Portals.xaml" Name="PortalsFrame"/>
                 </TabItem>
             </TabControl>
             <StackPanel Grid.Row="1" Margin="0 4 0 0" HorizontalAlignment="Left" Orientation="Horizontal">

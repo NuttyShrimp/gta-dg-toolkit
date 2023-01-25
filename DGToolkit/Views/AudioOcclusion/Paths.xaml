@@ -1,0 +1,17 @@
+﻿<Page x:Class="DGToolkit.Views.AudioOcclusion.Paths"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:DGToolkit.Views.AudioOcclusion"
+      mc:Ignorable="d"
+      Title="Paths" Height="590" Width="890">
+    <StackPanel Margin="10 10 10 10">
+        <TextBlock HorizontalAlignment="Center">From room</TextBlock>
+        <DataGrid Name="AudioPaths" HorizontalAlignment="Stretch" ItemsSource="{Binding }" CanUserAddRows="False"
+                  IsReadOnly="False" CanUserDeleteRows="False" CanUserSortColumns="False" AutoGenerateColumns="False"
+                  Loaded="AudioPaths_OnLoaded" Width="870" Height="550" MinColumnWidth="40"
+                  CellEditEnding="AudioPaths_OnCellEditEnding">
+        </DataGrid>
+    </StackPanel>
+</Page>

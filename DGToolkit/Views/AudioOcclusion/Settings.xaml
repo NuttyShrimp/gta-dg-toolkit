@@ -9,22 +9,22 @@
     <StackPanel Margin="50 50 0 0">
         <StackPanel Orientation="Horizontal">
             <Label Width="100">Assets Root Path</Label>
-            <TextBox Width="300" Name="ResourcePath"></TextBox>
+            <TextBox Width="300" Name="ResourcePath" Text="{Binding Path=assetsPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }" />
             <Button Width="80" Margin="10 0 0 0" Click="SelectResourcePathClick">Select Folder</Button>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
             <Label Width="100">Name</Label>
-            <TextBox Width="300" Name="InteriorName" Text="{Binding }"></TextBox>
+            <TextBox Width="300" Name="InteriorName" Text="{Binding Path=name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
             <Label Width="100">Ymap Path</Label>
-            <TextBox Width="300" Name="InteriorYmap" Text="{Binding }"></TextBox>
-            <Button Width="80" Margin="10 0 0 0">Select File</Button>
+            <TextBox Width="300" Name="InteriorYmap" Text="{Binding Path=ymapPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"></TextBox>
+            <Button Width="80" Margin="10 0 0 0" Click="SelectYmapPathClick">Select File</Button>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
             <Label Width="100">Ytyp Path</Label>
-            <TextBox Width="300" Name="InteriorYtyp" Text="{Binding }"></TextBox>
-            <Button Width="80" Margin="10 0 0 0">Select File</Button>
+            <TextBox Width="300" Name="InteriorYtyp" Text="{Binding Path=ytypPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"></TextBox>
+            <Button Width="80" Margin="10 0 0 0" Click="SelectYtypPathClick">Select File</Button>
         </StackPanel>
     </StackPanel>
 </Page>
