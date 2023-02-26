@@ -166,9 +166,63 @@
           "sampleRate": 0.0
         }
       ]
+    },
+    {
+      "name": "Sirens",
+      "files": [
+        {
+          "name": "SIREN_1.ogg",
+          "looped": false,
+          "headers": {
+            "volume": 100,
+            "dopplerFactor": 5,
+            "categoryHash": "C578123C",
+            "rolloffHash": "C2770146",
+            "distance": 300,
+            "echox": 0,
+            "echoy": 0,
+            "echoz": 0
+          },
+          "samples": 0.0,
+          "sampleRate": 0.0
+        },
+        {
+          "name": "SIREN_2.ogg",
+          "looped": false,
+          "headers": {
+            "volume": 100,
+            "dopplerFactor": 5,
+            "categoryHash": "C578123C",
+            "rolloffHash": "C2770146",
+            "distance": 300,
+            "echox": 0,
+            "echoy": 0,
+            "echoz": 0
+          },
+          "samples": 0.0,
+          "sampleRate": 0.0
+        },
+        {
+          "name": "SIREN_3.ogg",
+          "looped": false,
+          "headers": {
+            "volume": 100,
+            "dopplerFactor": 5,
+            "categoryHash": "C578123C",
+            "rolloffHash": "C2770146",
+            "distance": 300,
+            "echox": 0,
+            "echoy": 0,
+            "echoz": 0
+          },
+          "samples": 0.0,
+          "sampleRate": 0.0
+        }
+      ]
     }
   ],
   "packNames": [
-    "Sounds"
+    "Sounds",
+    "Sirens"
   ]
 }
