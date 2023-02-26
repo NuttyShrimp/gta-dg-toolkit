@@ -50,6 +50,7 @@ namespace DGToolkit.Views
 
         private void LoadPackNames()
         {
+            packNames.Clear();
             var names = _packs.state.manifest.packNames;
             foreach (var name in names)
             {
@@ -147,6 +148,7 @@ namespace DGToolkit.Views
             if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
             {
                 _packs.AddPack(dialog.packName);
+                LoadPackNames();
                 DLCPackName.SelectedValue = dialog.packName;
             }
         }
