@@ -108,7 +108,7 @@ public class Util
         [XmlAttribute] public string value { get; set; }
     }
 
-    public static Regex numReg = new Regex("[0-9]+");
+    public static Regex numReg = new Regex("[0-9,.]+");
 
     public static void NumberInputText(object _, TextCompositionEventArgs e)
     {

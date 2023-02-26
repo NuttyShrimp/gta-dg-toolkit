@@ -53,7 +53,7 @@ class AudioPacks
         // Create dlc_xxx_xxx dir for awc file
         var rpfInfo = new DirectoryInfo(Path.Combine(state.manifest.outputPath,
             $"dlc_{state.manifest.dlcName}"));
-        if (rpfInfo.Exists) rpfInfo.Delete(true);
+        // if (rpfInfo.Exists) rpfInfo.Delete(true);
 
         rpfInfo.Create();
         // Create _tmp folder for generated unwanted files (xml, wav)
