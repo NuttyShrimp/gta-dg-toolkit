@@ -114,4 +114,6 @@ public class Util
     {
         e.Handled = !numReg.IsMatch(e.Text);
     }
+
+    public static int Int32Round(int num) => (int) (num & 0xffffffff);
 }

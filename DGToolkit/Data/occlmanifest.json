@@ -59,7 +59,245 @@
           "echo": 0.1
         }
       ],
-      "portals": []
+      "portals": [
+        {
+          "entityIdx": 0,
+          "portalRoomIdx": 0,
+          "entityHash": -1515995559,
+          "portalId": 0,
+          "srcRoomIdx": 0,
+          "destRoomIdx": 1,
+          "maxOccl": 0.7,
+          "isDoor": true,
+          "isGlass": false
+        },
+        {
+          "entityIdx": 0,
+          "portalRoomIdx": 0,
+          "entityHash": -1515995559,
+          "portalId": 0,
+          "srcRoomIdx": 1,
+          "destRoomIdx": 0,
+          "maxOccl": 0.7,
+          "isDoor": true,
+          "isGlass": false
+        },
+        {
+          "entityIdx": 0,
+          "portalRoomIdx": 1,
+          "entityHash": 1382639660,
+          "portalId": 1,
+          "srcRoomIdx": 1,
+          "destRoomIdx": 2,
+          "maxOccl": 0.7,
+          "isDoor": true,
+          "isGlass": false
+        },
+        {
+          "entityIdx": 0,
+          "portalRoomIdx": 0,
+          "entityHash": 1382639660,
+          "portalId": 1,
+          "srcRoomIdx": 2,
+          "destRoomIdx": 1,
+          "maxOccl": 0.7,
+          "isDoor": true,
+          "isGlass": false
+        }
+      ]
+    },
+    {
+      "name": "Occl docu",
+      "ymapPath": "gtav_audio_occlusion_documentation-master\\stream\\lr_sc1_03_interior_v_shop_247_milo_.ymap",
+      "ytypPath": "gtav_audio_occlusion_documentation-master\\stream\\v_int_66.ytyp",
+      "paths": {
+        "0": [
+          1
+        ],
+        "1": [
+          0,
+          2
+        ],
+        "2": [
+          1
+        ]
+      },
+      "rooms": [
+        {
+          "roomIndex": 0,
+          "name": "limbo",
+          "reverb": 0.0,
+          "echo": 0.0
+        },
+        {
+          "roomIndex": 1,
+          "name": "V_66_ShopRm",
+          "reverb": 0.0,
+          "echo": 0.0
+        },
+        {
+          "roomIndex": 2,
+          "name": "V_66_BackRm",
+          "reverb": 0.0,
+          "echo": 0.0
+        }
+      ],
+      "portals": [
+        {
+          "entityIdx": 0,
+          "portalRoomIdx": 0,
+          "entityHash": 1720040497,
+          "portalId": 0,
+          "srcRoomIdx": 0,
+          "destRoomIdx": 1,
+          "maxOccl": 0.7,
+          "isDoor": true,
+          "isGlass": false
+        },
+        {
+          "entityIdx": 1,
+          "portalRoomIdx": 0,
+          "entityHash": -37449424,
+          "portalId": 0,
+          "srcRoomIdx": 0,
+          "destRoomIdx": 1,
+          "maxOccl": 0.7,
+          "isDoor": true,
+          "isGlass": false
+        },
+        {
+          "entityIdx": 0,
+          "portalRoomIdx": 0,
+          "entityHash": 1720040497,
+          "portalId": 0,
+          "srcRoomIdx": 1,
+          "destRoomIdx": 0,
+          "maxOccl": 0.7,
+          "isDoor": true,
+          "isGlass": false
+        },
+        {
+          "entityIdx": 1,
+          "portalRoomIdx": 0,
+          "entityHash": -37449424,
+          "portalId": 0,
+          "srcRoomIdx": 1,
+          "destRoomIdx": 0,
+          "maxOccl": 0.7,
+          "isDoor": true,
+          "isGlass": false
+        },
+        {
+          "entityIdx": 0,
+          "portalRoomIdx": 1,
+          "entityHash": -439233846,
+          "portalId": 3,
+          "srcRoomIdx": 0,
+          "destRoomIdx": 1,
+          "maxOccl": 0.7,
+          "isDoor": true,
+          "isGlass": false
+        },
+        {
+          "entityIdx": 1,
+          "portalRoomIdx": 1,
+          "entityHash": -779910672,
+          "portalId": 3,
+          "srcRoomIdx": 0,
+          "destRoomIdx": 1,
+          "maxOccl": 0.7,
+          "isDoor": true,
+          "isGlass": false
+        },
+        {
+          "entityIdx": 0,
+          "portalRoomIdx": 1,
+          "entityHash": -439233846,
+          "portalId": 3,
+          "srcRoomIdx": 1,
+          "destRoomIdx": 0,
+          "maxOccl": 0.7,
+          "isDoor": true,
+          "isGlass": false
+        },
+        {
+          "entityIdx": 1,
+          "portalRoomIdx": 1,
+          "entityHash": -779910672,
+          "portalId": 3,
+          "srcRoomIdx": 1,
+          "destRoomIdx": 0,
+          "maxOccl": 0.7,
+          "isDoor": true,
+          "isGlass": false
+        },
+        {
+          "entityIdx": 0,
+          "portalRoomIdx": 2,
+          "entityHash": -439233846,
+          "portalId": 4,
+          "srcRoomIdx": 0,
+          "destRoomIdx": 1,
+          "maxOccl": 0.7,
+          "isDoor": true,
+          "isGlass": false
+        },
+        {
+          "entityIdx": 1,
+          "portalRoomIdx": 2,
+          "entityHash": -779910672,
+          "portalId": 4,
+          "srcRoomIdx": 0,
+          "destRoomIdx": 1,
+          "maxOccl": 0.7,
+          "isDoor": true,
+          "isGlass": false
+        },
+        {
+          "entityIdx": 0,
+          "portalRoomIdx": 2,
+          "entityHash": -439233846,
+          "portalId": 4,
+          "srcRoomIdx": 1,
+          "destRoomIdx": 0,
+          "maxOccl": 0.7,
+          "isDoor": true,
+          "isGlass": false
+        },
+        {
+          "entityIdx": 1,
+          "portalRoomIdx": 2,
+          "entityHash": -779910672,
+          "portalId": 4,
+          "srcRoomIdx": 1,
+          "destRoomIdx": 0,
+          "maxOccl": 0.7,
+          "isDoor": true,
+          "isGlass": false
+        },
+        {
+          "entityIdx": 0,
+          "portalRoomIdx": 3,
+          "entityHash": 872978105,
+          "portalId": 5,
+          "srcRoomIdx": 0,
+          "destRoomIdx": 1,
+          "maxOccl": 0.7,
+          "isDoor": true,
+          "isGlass": false
+        },
+        {
+          "entityIdx": 0,
+          "portalRoomIdx": 3,
+          "entityHash": 872978105,
+          "portalId": 5,
+          "srcRoomIdx": 1,
+          "destRoomIdx": 0,
+          "maxOccl": 0.7,
+          "isDoor": true,
+          "isGlass": false
+        }
+      ]
     }
   ]
 }

@@ -34,6 +34,11 @@ public partial class AudioOcclusion : Page
         _model.save();
     }
 
+    private void GenerateButtonClick(object sender, RoutedEventArgs e)
+    {
+        _model.generate();
+    }
+
     private void InteriorList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         var entry = InteriorList.SelectedItem as InteriorEntry;

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using CodeWalker.GameFiles;
-using Xabe.FFmpeg;
 
 namespace DGToolkit.Models.AudioOcclusion;
 
@@ -166,6 +164,7 @@ public class OcclusionModel
             data.interiors[selected.Value.Value].rooms = LoadRooms(data.interiors[selected.Value.Value]);
             data.interiors[selected.Value.Value].portals = LoadPortals(data.interiors[selected.Value.Value]);
         }
+        save();
     }
 
     public void selectEntry(InteriorEntry entry)
@@ -215,5 +214,13 @@ public class OcclusionModel
     public void save()
     {
         occlParser.SaveManifest(data);
+    }
+
+    public void generate()
+    {
+        if (selected.Value == null) return;
+        var entry = data.interiors[selected.Value.Value];
+        var generator = new OcclGenerator(entry);
+        generator.Start();
     }
 }

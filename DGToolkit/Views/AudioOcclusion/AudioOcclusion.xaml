@@ -44,7 +44,7 @@
             <StackPanel Grid.Row="1" Margin="0 4 0 0" HorizontalAlignment="Left" Orientation="Horizontal">
                 <Button Click="ResetButtonClick">Reset</Button>
                 <Button Margin="10 0 0 0" Click="SaveButtonClick">Save</Button>
-                <Button Margin="10 0 0 0" Click="CreateInteriorEntryClick">Generate</Button>
+                <Button Margin="10 0 0 0" Click="GenerateButtonClick">Generate</Button>
             </StackPanel>
         </Grid>
     </StackPanel>
