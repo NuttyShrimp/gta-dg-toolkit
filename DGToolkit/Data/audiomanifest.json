@@ -1,6 +1,6 @@
 {
   "dlcName": "nutty",
-  "outputPath": "E:\\gitrepos\\audio-generator\\output",
+  "outputPath": "C:\\Users\\janle\\Documents\\projects\\git\\degrens\\dg_2\\resources\\[standalone]\\nutty-sounds",
   "data": [
     {
       "name": "Sounds",
@@ -17,9 +17,7 @@
             "echox": 0,
             "echoy": 0,
             "echoz": 0
-          },
-          "samples": 0.0,
-          "sampleRate": 0.0
+          }
         },
         {
           "name": "phone_ringtone.mp3",
@@ -33,9 +31,7 @@
             "echox": 0,
             "echoy": 0,
             "echoz": 0
-          },
-          "samples": 0.0,
-          "sampleRate": 0.0
+          }
         },
         {
           "name": "lowfuel.mp3",
@@ -49,9 +45,7 @@
             "echox": 0,
             "echoy": 0,
             "echoz": 0
-          },
-          "samples": 0.0,
-          "sampleRate": 0.0
+          }
         },
         {
           "name": "car_lock.mp3",
@@ -65,9 +59,7 @@
             "echox": 0,
             "echoy": 0,
             "echoz": 0
-          },
-          "samples": 0.0,
-          "sampleRate": 0.0
+          }
         },
         {
           "name": "car_unlock.mp3",
@@ -81,9 +73,7 @@
             "echox": 0,
             "echoy": 0,
             "echoz": 0
-          },
-          "samples": 0.0,
-          "sampleRate": 0.0
+          }
         },
         {
           "name": "error_sound.ogg",
@@ -97,9 +87,7 @@
             "echox": 0,
             "echoy": 0,
             "echoz": 0
-          },
-          "samples": 0.0,
-          "sampleRate": 0.0
+          }
         },
         {
           "name": "nospurge.ogg",
@@ -113,9 +101,7 @@
             "echox": 0,
             "echoy": 0,
             "echoz": 0
-          },
-          "samples": 0.0,
-          "sampleRate": 0.0
+          }
         },
         {
           "name": "cuff.ogg",
@@ -129,9 +115,7 @@
             "echox": 0,
             "echoy": 0,
             "echoz": 0
-          },
-          "samples": 0.0,
-          "sampleRate": 0.0
+          }
         },
         {
           "name": "uncuff.ogg",
@@ -145,9 +129,7 @@
             "echox": 0,
             "echoy": 0,
             "echoz": 0
-          },
-          "samples": 0.0,
-          "sampleRate": 0.0
+          }
         },
         {
           "name": "emergency.ogg",
@@ -161,9 +143,7 @@
             "echox": 0,
             "echoy": 0,
             "echoz": 0
-          },
-          "samples": 0.0,
-          "sampleRate": 0.0
+          }
         }
       ]
     },
@@ -171,52 +151,46 @@
       "name": "Sirens",
       "files": [
         {
-          "name": "SIREN_1.ogg",
+          "name": "SIREN_1.wav",
           "looped": false,
           "headers": {
-            "volume": 100,
+            "volume": 65300,
             "dopplerFactor": 5,
             "categoryHash": "C578123C",
             "rolloffHash": "C2770146",
-            "distance": 300,
+            "distance": 200,
             "echox": 0,
             "echoy": 0,
             "echoz": 0
-          },
-          "samples": 0.0,
-          "sampleRate": 0.0
+          }
         },
         {
-          "name": "SIREN_2.ogg",
+          "name": "SIREN_2.wav",
           "looped": false,
           "headers": {
-            "volume": 100,
+            "volume": 65300,
             "dopplerFactor": 5,
             "categoryHash": "C578123C",
             "rolloffHash": "C2770146",
-            "distance": 300,
+            "distance": 200,
             "echox": 0,
             "echoy": 0,
             "echoz": 0
-          },
-          "samples": 0.0,
-          "sampleRate": 0.0
+          }
         },
         {
-          "name": "SIREN_3.ogg",
+          "name": "SIREN_3.wav",
           "looped": false,
           "headers": {
-            "volume": 100,
+            "volume": 65300,
             "dopplerFactor": 5,
             "categoryHash": "C578123C",
             "rolloffHash": "C2770146",
-            "distance": 300,
+            "distance": 200,
             "echox": 0,
             "echoy": 0,
             "echoz": 0
-          },
-          "samples": 0.0,
-          "sampleRate": 0.0
+          }
         }
       ]
     }
