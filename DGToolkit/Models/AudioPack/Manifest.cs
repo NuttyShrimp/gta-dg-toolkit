@@ -49,33 +49,12 @@ namespace DGToolkit.Models.AudioPack
 
     public class Parser
     {
-        private readonly string dataDirPath = Path.Combine(AppContext.BaseDirectory, "../../../Data");
-
-        private void ValidateDataPath(string path)
-        {
-            if (!Directory.Exists(path))
-            {
-                MessageBox.Show($"Could not find the data directory at {path}",
-                    "Alert", MessageBoxButton.OK, MessageBoxImage.Error);
-                Application.Current.Shutdown();
-            }
-
-            string manifestPath = Path.Combine(path, "./audiomanifest.json");
-
-            if (!File.Exists(manifestPath))
-            {
-                MessageBox.Show($"Could not find the audiomanifest file at {manifestPath}",
-                    "Alert", MessageBoxButton.OK, MessageBoxImage.Error);
-                Application.Current.Shutdown();
-            }
-        }
-
         public Manifest ImportManifest()
         {
             // We know that the program shutdown if there was an error
-            ValidateDataPath(dataDirPath);
+            Util.DataDir.ValidateDataPath(Util.DataDir.dataDirPath);
 
-            string manifestPath = Path.Combine(dataDirPath, "./audiomanifest.json");
+            string manifestPath = Path.Combine(Util.DataDir.dataDirPath, "./audiomanifest.json");
             Manifest? manifest = JsonConvert.DeserializeObject<Manifest>(File.ReadAllText(manifestPath));
             if (manifest == null)
             {
@@ -84,7 +63,7 @@ namespace DGToolkit.Models.AudioPack
                 Application.Current.Shutdown();
             }
 
-            manifest!.dataPath = dataDirPath;
+            manifest!.dataPath = Util.DataDir.dataDirPath;
             manifest!.packNames = new ObservableCollection<string>();
             foreach (var dlcEntry in manifest!.data)
             {
@@ -99,7 +78,7 @@ namespace DGToolkit.Models.AudioPack
         public bool WriteManifest(Manifest manifest)
         {
             // Check if audioManifest.json is available in our manifest.dataPath location
-            ValidateDataPath(manifest.dataPath);
+            Util.DataDir.ValidateDataPath(manifest.dataPath);
 
             var manifestPath = Path.Combine(manifest.dataPath, "./audiomanifest.json");
             var jsonString = JsonConvert.SerializeObject(manifest, Formatting.Indented);

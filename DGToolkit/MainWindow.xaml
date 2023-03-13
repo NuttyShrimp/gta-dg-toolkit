@@ -12,6 +12,9 @@
                 <TabItem Header="Audio Pack">
                     <Frame Source="/Views/AudioPack/AudioPackView.xaml" />
                 </TabItem>
+                <TabItem Header="Clothing">
+                    <Frame Source="/Views/Clothing/ClothingView.xaml" />
+                </TabItem>
                 <TabItem Header="Vehicles">
                     <Frame Source="/Views/Vehicles/VehicleWrapper.xaml" />
                 </TabItem>

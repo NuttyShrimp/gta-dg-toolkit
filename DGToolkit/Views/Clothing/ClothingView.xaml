@@ -1,0 +1,23 @@
+﻿<Page x:Class="DGToolkit.Views.Clothing.ClothingView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:DGToolkit.Views.Clothing"
+      mc:Ignorable="d"
+      Title="ClothingView"
+      Height="660" Width="1280">
+    <StackPanel Margin="10" Orientation="Horizontal">
+        <GroupBox Header="Drawables" Width="300">
+            <StackPanel>
+                <ListBox SelectionMode="Single" ItemsSource="{Binding}" Name="InteriorList" Height="585">
+                </ListBox>
+                <StackPanel Margin="0 10 0 0" Orientation="Horizontal">
+                    <Button Margin="0 0 10 0">Open YMT</Button>
+                    <Button Margin="0 0 10 0">Save YMT</Button>
+                    <Button Margin="0 0 10 0">Options</Button>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+    </StackPanel>
+</Page>

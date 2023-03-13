@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Xml;
 using System.Xml.Serialization;
@@ -113,5 +114,29 @@ public class Util
     public static void NumberInputText(object _, TextCompositionEventArgs e)
     {
         e.Handled = !numReg.IsMatch(e.Text);
+    }
+}
+
+public class DataDir
+{
+    public static readonly string dataDirPath = Path.Combine(AppContext.BaseDirectory, "../../../Data");
+
+    public static void ValidateDataPath(string path)
+    {
+        if (!Directory.Exists(path))
+        {
+            MessageBox.Show($"Could not find the data directory at {path}",
+                "Alert", MessageBoxButton.OK, MessageBoxImage.Error);
+            Application.Current.Shutdown();
+        }
+
+        string manifestPath = Path.Combine(path, "./audiomanifest.json");
+
+        if (!File.Exists(manifestPath))
+        {
+            MessageBox.Show($"Could not find the audiomanifest file at {manifestPath}",
+                "Alert", MessageBoxButton.OK, MessageBoxImage.Error);
+            Application.Current.Shutdown();
+        }
     }
 }
