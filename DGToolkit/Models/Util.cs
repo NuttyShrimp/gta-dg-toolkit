@@ -83,6 +83,18 @@ internal class FFMPEG
     }
 }
 
+public class IndexValue<T>
+{
+    public int Index { get; set; }
+    public T Value { get; set; }
+
+    public IndexValue(int index, T value)
+    {
+        Index = index;
+        Value = value;
+    }
+}
+
 public class Util
 {
     public static string CustomTrimmer(string input)

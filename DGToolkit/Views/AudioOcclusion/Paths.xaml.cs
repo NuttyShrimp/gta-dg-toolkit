@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Dynamic;
@@ -21,23 +22,24 @@ public partial class Paths : Page
     {
         Model = OcclusionModel.instance;
         rows = new List<ExpandoObject>();
+        Model.selected.PropertyChanged += SelectedOnPropertyChanged;
         InitializeComponent();
     }
 
-    private void AudioPaths_OnLoaded(object sender, RoutedEventArgs e)
+    private void SelectedOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (Model.selected.Value == null) return;
-        rows.Clear();
+        rows = new List<ExpandoObject>();
         // First col is text
         var paths = Model.data.interiors[Model.selected.Value.Value].paths;
-
+        
         //clear rows & columns
         AudioPaths.Columns.Clear();
 
         //add type Column
         DataGridTextColumn toColumn = new DataGridTextColumn();
-        toColumn.Header = "To";
-        toColumn.Binding = new Binding("To");
+        toColumn.Header = "RoomIndex";
+        toColumn.Binding = new Binding("RoomIndex");
         AudioPaths.Columns.Add(toColumn);
 
         //Define rows
@@ -66,10 +68,10 @@ public partial class Paths : Page
             AudioPaths.Columns.Add(column);
 
             var row = new ExpandoObject() as IDictionary<string, object>;
-            row.Add("To", roomTo.ToString());
+            row.Add("RoomIndex", roomTo.ToString());
             for (var i = 0; i < paths.Count; i++)
             {
-                row.Add(i.ToString(), routes.Contains(i));
+                row.Add(i.ToString(), (object) routes.Contains(i));
             }
 
             rows.Add(row as ExpandoObject);
@@ -90,7 +92,7 @@ public partial class Paths : Page
             paths.Add(fromRoom, new HashSet<int>());
         }
 
-        var toRoomStr = ((IDictionary<string, object>) e.Row.Item)["To"] as string;
+        var toRoomStr = ((IDictionary<string, object>) e.Row.Item)["RoomIndex"] as string;
         if (toRoomStr == null)
         {
             throw new DataException("toRoomStr is null");

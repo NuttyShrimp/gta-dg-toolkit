@@ -27,7 +27,7 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="25" />
             </Grid.RowDefinitions>
-            <TabControl Grid.Row="0" Width="950">
+            <TabControl Grid.Row="0" Width="925">
                 <TabItem Header="Settings">
                     <Frame Source="Settings.xaml" Name="SettingsFrame"/>
                 </TabItem>

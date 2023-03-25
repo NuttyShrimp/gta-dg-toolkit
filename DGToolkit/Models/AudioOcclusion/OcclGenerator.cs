@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Xml;
 using CodeWalker.GameFiles;
 using DGToolkit.Models.AudioOcclusion.Output;
+using DGToolkit.Models.AudioOcclusion.PathNodes;
 using DGToolkit.Models.Util;
 using static DGToolkit.Models.Util.Util;
 
@@ -30,7 +31,7 @@ public class OcclGenerator
         outputPath = "";
     }
 
-    private List<PortalInfo> generatePortalInfoList()
+    private List<PortalInfo> GeneratePortalInfoList()
     {
         var portalInfoList = new List<PortalInfo>();
 
@@ -82,9 +83,9 @@ public class OcclGenerator
         return portalInfoList;
     }
 
-    private List<PathNode> generatePathNodeList()
+    private List<Output.PathNode> GeneratePathNodeList(List<PortalInfo> portalInfoList)
     {
-        var nodes = new List<PathNode>();
+        var nodes = new List<PathNodes.PathNode>();
         var roomJoaats = new Dictionary<int, int>();
         var roomHashes = new Dictionary<int, int>();
         foreach (var room in mloArchetype.rooms)
@@ -94,21 +95,70 @@ public class OcclGenerator
             roomHashes.Add(room.Index, Int32Round(occlusionHash ^ joaat));
         }
 
+        List<IndexValue<PortalInfo>> indexedPortalInfoList =
+            portalInfoList.Select((p, i) => new IndexValue<PortalInfo>(i, p)).ToList();
+
+        List<NodeGeneration> generationQueue = new List<NodeGeneration>();
+
         foreach (var (fromRoom, toRooms) in Entry.paths)
         {
             foreach (var toRoom in toRooms)
             {
+                // Find all portals with these rooms
+                var portals = indexedPortalInfoList.FindAll(p =>
+                    p.Value.RoomIdx.value == fromRoom.ToString() && p.Value.DestRoomIdx.value == toRoom.ToString()
+                );
                 var key = Int32Round(roomJoaats[fromRoom] - roomHashes[toRoom]);
+                if (portals.Count == 0)
+                {
+                    generationQueue.Add(new NodeGeneration()
+                    {
+                        PathListKey = key,
+                        toRoom = toRoom,
+                        FromRoom = fromRoom,
+                        hopCount = 0,
+                        usedRoom = new List<int>(),
+                        path = new List<NodeGenerationEntry>()
+                    });
+                }
+                else
+                {
+                    var pathNode = new PathNodes.PathNode()
+                    {
+                        Key = key,
+                        EntList = portals.ConvertAll(p => new PathNodes.PathNodeChild()
+                        {
+                            Key = 0,
+                            PortalInfoIdx = p.Index
+                        })
+                    };
+                    nodes.Add(pathNode);
+                }
             }
         }
 
-        return nodes;
+        // TODO: traverse queue and do fun stuff
+        
+        return nodes.ConvertAll(n => new Output.PathNode()
+            {
+                Key = CreateValue(n.Key.ToString()),
+                PathNodeChildList = new PathNodeChildList()
+                {
+                    PortalEntList = n.EntList.ConvertAll(ent => new Output.PathNodeChild()
+                    {
+                        PathNodeKey = CreateValue(ent.Key.ToString()),
+                        PortalInfoIdx = CreateValue(ent.PortalInfoIdx.ToString())
+                    })
+                }
+            }
+        );
     }
 
-    private void generateOcclusionMetadata()
+    private void GenerateOcclusionMetadata()
     {
         var metadata = new naOcclusionInteriorMetadata();
-        metadata.PortalInfoList.PortalInfoList = generatePortalInfoList();
+        metadata.PortalInfoList.PortalInfoList = GeneratePortalInfoList();
+        metadata.PathNodeList.PortalInfoList = GeneratePathNodeList(metadata.PortalInfoList.PortalInfoList);
 
         var xmlFilePath = Path.Join(outputPath, $"{occlusionHash}.ymt.pso.xml");
         Xml.WriteXml(xmlFilePath, metadata);
@@ -179,6 +229,6 @@ public class OcclGenerator
 
         outputPath = dialog.SelectedPath;
 
-        generateOcclusionMetadata();
+        GenerateOcclusionMetadata();
     }
 }
