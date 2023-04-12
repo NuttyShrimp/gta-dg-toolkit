@@ -13,6 +13,9 @@ cache:
   paths:
     - '$NUGET_PACKAGES_DIRECTORY'
 
+before_script:
+  - dotnet restore --packages $NUGET_PACKAGES_DIRECTORY DGToolkit/DGToolkit.csproj
+
 build:
   stage: build
   except: 
