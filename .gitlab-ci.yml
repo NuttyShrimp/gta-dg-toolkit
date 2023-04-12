@@ -1,0 +1,54 @@
+﻿image: mcr.microsoft.com/dotnet/sdk:6.0
+
+stages:
+  - build
+  - release
+
+variables:
+  NUGET_PACKAGES_DIRECTORY: '.nuget'
+
+cache:
+  # Per-stage and per-branch caching.
+  key: "$CI_JOB_STAGE-$CI_COMMIT_REF_SLUG-nuget"
+  paths:
+    - '$NUGET_PACKAGES_DIRECTORY'
+
+build:
+  stage: build
+  script:
+    - dotnet build
+
+build-release:
+  stage: build
+  only: 
+    - tags
+  artifacts:
+    paths:
+      - dgtoolkit.zip
+    expire_in: never
+  script:
+    - dotnet build
+    - dotnet publish -c Release -o ./publish DGToolkit/DGToolkit.csproj
+    - zip -r dgtoolkit.zip publish
+
+release:
+  stage: release
+  only: 
+    - tags
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  script:
+    - echo 'running release_job'
+    - echo 'Previous Job ID is printed below'
+    - echo $GE_JOB_ID
+  # Specifying that this job requires artifacts from the previous job to succeed
+  needs:
+    - job: build-release
+      artifacts: true
+  release:
+    name: 'Release $CI_COMMIT_TAG'
+    description: 'Automated release of $CI_COMMIT_TAG'
+    tag_name: '$CI_COMMIT_SHORT_SHA'
+    assets:
+      links:
+        - name: 'Download'
+          url: '$CI_JOB_URL/artifacts/browse/dgtoolkit.zip'
