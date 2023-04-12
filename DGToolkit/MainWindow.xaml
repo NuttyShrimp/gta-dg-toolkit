@@ -6,19 +6,17 @@
         xmlns:local="clr-namespace:DGToolkit"
         mc:Ignorable="d"
         Title="MainWindow" Height="720" Width="1280">
-    <Grid>
-        <StackPanel>
-            <TabControl>
-                <TabItem Header="Audio Pack">
-                    <Frame Source="/Views/AudioPack/AudioPackView.xaml" />
-                </TabItem>
-                <TabItem Header="Clothing">
-                    <Frame Source="/Views/Clothing/ClothingView.xaml" />
-                </TabItem>
-                <TabItem Header="Vehicles">
-                    <Frame Source="/Views/Vehicles/VehicleWrapper.xaml" />
-                </TabItem>
-            </TabControl>
-        </StackPanel>
-    </Grid>
+    <DockPanel>
+        <TabControl>
+            <TabItem Header="Audio Pack">
+                <Frame Source="/Views/AudioPack/AudioPackView.xaml" HorizontalAlignment="Stretch" />
+            </TabItem>
+            <TabItem Header="Clothing">
+                <Frame Source="/Views/Clothing/ClothingView.xaml" HorizontalAlignment="Stretch" />
+            </TabItem>
+            <TabItem Header="Vehicles">
+                <Frame Source="/Views/Vehicles/VehicleWrapper.xaml" HorizontalAlignment="Stretch" />
+            </TabItem>
+        </TabControl>
+    </DockPanel>
 </Window>

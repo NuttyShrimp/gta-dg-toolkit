@@ -96,7 +96,8 @@ namespace DGToolkit.Views
         private async void GeneratePacks(object sender, RoutedEventArgs e)
         {
             (sender as Button).IsEnabled = false;
-            var pDialog = new ProgressDialog(_packs.logStore);
+            _packs.logStore.Clear();
+            var pDialog = new LogListDialog(_packs.logStore);
 
             async Task Work()
             {

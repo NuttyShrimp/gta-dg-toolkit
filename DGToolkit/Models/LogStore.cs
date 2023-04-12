@@ -8,7 +8,7 @@ public class LogStore
 {
     public delegate void LogChangedHandler(object sender, LogChangedEventArgs e);
 
-    public event LogChangedHandler LogChanged;
+    public event LogChangedHandler? LogChanged;
     public string log { get; private set; }
 
     public LogStore()
@@ -20,13 +20,13 @@ public class LogStore
     {
         Debug.WriteLine(entry);
         log += entry + "\n";
-        LogChanged(this, new LogChangedEventArgs(log));
+        if (LogChanged != null) LogChanged(this, new LogChangedEventArgs(log));
     }
 
     public void Clear()
     {
         log = "";
-        LogChanged(this, new LogChangedEventArgs(log));
+        if (LogChanged != null) LogChanged(this, new LogChangedEventArgs(log));
     }
 }
 

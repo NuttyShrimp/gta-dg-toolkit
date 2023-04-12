@@ -50,9 +50,13 @@
     <ItemGroup>
       <Folder Include="Views\AudioOcclusion" />
     </ItemGroup>
-
     <ItemGroup>
       <Page Update="Views\AudioPack\AudioPackView.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
+      <Page Update="Views\LogListDialog.xaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
         <SubType>Designer</SubType>

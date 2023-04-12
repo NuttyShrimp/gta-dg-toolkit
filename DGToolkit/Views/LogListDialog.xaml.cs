@@ -5,10 +5,10 @@ using DGToolkit.Models;
 
 namespace DGToolkit.Views.AudioPack;
 
-public partial class ProgressDialog : Window
+public partial class LogListDialog : Window
 {
     private LogStore store;
-    public ProgressDialog(LogStore store)
+    public LogListDialog(LogStore store)
     {
         InitializeComponent();
         this.store = store;

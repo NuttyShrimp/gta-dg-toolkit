@@ -115,6 +115,18 @@ public class Util
     {
         e.Handled = !numReg.IsMatch(e.Text);
     }
+
+    public static String Number2String(int number, bool isCaps)
+    {
+        Char c = (Char) ((isCaps ? 65 : 97) + (number));
+        return c.ToString();
+    }
+
+    // 3 length string, padded with 0s in front
+    public static String NumberToNumeric(int number)
+    {
+        return number.ToString().PadLeft(3, '0');
+    }
 }
 
 public class DataDir
