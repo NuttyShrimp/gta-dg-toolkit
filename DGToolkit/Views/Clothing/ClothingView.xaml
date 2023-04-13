@@ -39,34 +39,52 @@
                     </ListBox>
                     <Menu>
                         <MenuItem Click="SaveAndGenerateClick" Header="Save/Generate" />
-                        <MenuItem Click="SelectStreamFolder" Header="⚙️Select stream folder" />
+                        <MenuItem Click="SelectStreamFolderClick" Header="⚙️Select stream folder" />
                         <MenuItem Click="ViewLogClick" Header="Logs" />
                     </Menu>
                 </StackPanel>
             </GroupBox>
         </StackPanel>
         <GroupBox Header="Selected Drawable" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
-                  Margin="10 0 00 0" Name="DrawableInfoPanel">
+                  Margin="10 0 00 0" Name="DrawableInfoPanel" Visibility="Hidden">
             <DockPanel>
                 <Grid DockPanel.Dock="Top">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <GroupBox Grid.Column="0" Header="Cloth type">
+                    <GroupBox Grid.Column="0" Header="Position">
+                        <TextBox BorderBrush="White" PreviewTextInput="NumberInputText" Name="DrawablePosition"
+                                 Text="{Binding CurrentComponentIndex}" />
+                    </GroupBox>
+                    <GroupBox Grid.Column="1" Header="Cloth type">
                         <ComboBox Name="ClothTypeBox" />
                     </GroupBox>
-                    <GroupBox Grid.Column="1" Header="Drawable type">
+                    <GroupBox Grid.Column="2" Header="Drawable type">
                         <ComboBox Name="DrawTypeBox"></ComboBox>
                     </GroupBox>
                 </Grid>
                 <GroupBox Header="Textures">
                     <DockPanel>
                         <Menu DockPanel.Dock="Bottom">
-                            <MenuItem Header="Add Texture" />
+                            <MenuItem Header="Add Texture" Click="RemoveTextureClick" />
                             <MenuItem Header="Remove Texture" />
                         </Menu>
-                        <ListBox></ListBox>
+                        <ListBox Name="TextureList">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Width="274">
+                                        <StackPanel.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Remove" Click="RemoveTextureClick" />
+                                            </ContextMenu>
+                                        </StackPanel.ContextMenu>
+                                        <TextBlock Text="{Binding DisplayName}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                     </DockPanel>
                 </GroupBox>
             </DockPanel>

@@ -9,13 +9,7 @@ public class Loader
 {
     private static string GetCompFileName(int index, Types.DrawableTypes type, string postfix)
     {
-        var fileName = $"{index.ToString().PadLeft(3, '0')}_{ClothNameResolver.DrawableTypeToString(type)}";
-        if (postfix.Trim() != "")
-        {
-            fileName += $"_{postfix}";
-        }
-
-        return fileName;
+        return $"{ClothNameResolver.DrawableTypeToString(type)}_{index.ToString().PadLeft(3, '0')}{postfix}.ydd";
     }
 
     public static List<ClothData> GenerateData(ClothingManifest options, string dlcName)
@@ -31,8 +25,8 @@ public class Loader
         foreach (var clothInfo in dlcInfo)
         {
             var data = new ClothData(
-                Path.Combine(dlcName,
-                    GetCompFileName(clothInfo.Numeric, clothInfo.DrawableType, clothInfo.PostFix)),
+                Path.Combine("stream", dlcName,
+                    $"{dlcName}^{GetCompFileName(clothInfo.Numeric, clothInfo.DrawableType, clothInfo.PostFix)}"),
                 dlcName,
                 clothInfo.ClothType,
                 clothInfo.DrawableType, clothInfo.Numeric, clothInfo.PostFix, clothInfo.Description);
@@ -42,11 +36,8 @@ public class Loader
                 data.ExpressionMods = clothInfo.ExpressionMods;
             }
 
-            clothInfo.TextureMap.ToList().ForEach(x => data.Textures.Add(new TextureData()
-            {
-                file = x.Key,
-                name = x.Value
-            }));
+            data.Textures.Clear();
+            clothInfo.TextureMap.ToList().ForEach(p => data.Textures.Add(p));
 
             data.SearchForTextures(options.ResourceFolder);
         }

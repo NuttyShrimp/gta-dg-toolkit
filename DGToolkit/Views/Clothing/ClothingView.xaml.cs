@@ -5,28 +5,30 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Input;
 using DGToolkit.Models.Clothing;
 using DGToolkit.Models.Clothing.Options;
+using DGToolkit.Models.Util;
 using DGToolkit.Views.AudioPack;
 using DataFormats = System.Windows.Forms.DataFormats;
+using MessageBox = System.Windows.MessageBox;
 
 namespace DGToolkit.Views.Clothing;
 
 public partial class ClothingView : Page
 {
     public ClothingStore store { get; set; }
-    public ContextMenu listMenu { get; set; }
 
     public ClothingView()
     {
-        store = new ClothingStore();
-
-        listMenu = new ContextMenu();
-        listMenu.Items.Add("Remove");
+        store = ClothingStore.Instance;
 
         InitializeComponent();
-        DrawableList.Visibility = Visibility.Hidden;
-        
+        if (Properties.Settings.Default.ClothingResourceFolder == string.Empty)
+        {
+            SelectResourceFolder();
+        }
+
         AllowDrop = true;
         Drop += HandleFileDrop;
         DLCPackName.DataContext = store.availableDLCS;
@@ -35,6 +37,7 @@ public partial class ClothingView : Page
         {
             if (DrawableList.SelectedItem == null)
             {
+                store.selectedCloth = null;
                 DrawableInfoPanel.Visibility = Visibility.Hidden;
                 return;
             }
@@ -42,6 +45,7 @@ public partial class ClothingView : Page
             if (DrawableList.SelectedItem == null) return;
             var item = (ClothData) DrawableList.SelectedItem;
             store.selectedCloth = item;
+            TextureList.ItemsSource = item.Textures;
             DrawableInfoPanel.DataContext = item;
             ClothTypeBox.SelectedValue = item.ClothType;
             DrawableInfoPanel.Visibility = Visibility.Visible;
@@ -49,25 +53,35 @@ public partial class ClothingView : Page
         DrawableInfoPanel.IsVisibleChanged += (sender, args) =>
         {
             if (DrawableInfoPanel.Visibility != Visibility.Visible) return;
+            DrawablePosition.DataContext = store.selectedCloth;
             var clothTypeOptions = Types.ClothTypeDescriptions
                 .Select(p => new ComboBoxItem() {Content = p.Value, Tag = p.Key}).ToList();
             ClothTypeBox.ItemsSource = clothTypeOptions;
             var selectedItem =
                 clothTypeOptions.FindIndex(p => store.selectedCloth.ClothType == (Types.ClothTypes) p.Tag);
-            ClothTypeBox.SelectionChanged += (sender, args) =>
-            {
-                if (store.selectedCloth == null) return;
-                var item = (ComboBoxItem) ClothTypeBox.SelectedItem;
-                store.selectedCloth.ClothType = (Types.ClothTypes) item.Tag;
-                var drawTypeOptions = Types.ClothDrawableTypes[store.selectedCloth.ClothType]
-                    .Select(p => new ComboBoxItem()
-                        {Content = $"{p} [{ClothNameResolver.DrawableTypeToString(p)}]", Tag = p})
-                    .ToList();
-                DrawTypeBox.ItemsSource = drawTypeOptions;
-                DrawTypeBox.SelectedIndex =
-                    drawTypeOptions.FindIndex(p => store.selectedCloth.DrawableType == (Types.DrawableTypes) p.Tag);
-            };
             ClothTypeBox.SelectedIndex = selectedItem;
+        };
+        ClothTypeBox.SelectionChanged += (sender, args) =>
+        {
+            if (store.selectedCloth == null || ClothTypeBox.SelectedItem == null) return;
+
+            var item = (ComboBoxItem) ClothTypeBox.SelectedItem;
+            store.selectedCloth.ClothType = (Types.ClothTypes) item.Tag;
+
+            var drawTypeOptions = Types.ClothDrawableTypes[store.selectedCloth.ClothType]
+                .Select(p => new ComboBoxItem()
+                    {Content = $"{p} [{ClothNameResolver.DrawableTypeToString(p)}]", Tag = p})
+                .ToList();
+
+            DrawTypeBox.ItemsSource = drawTypeOptions;
+            DrawTypeBox.SelectedIndex =
+                drawTypeOptions.FindIndex(p => store.selectedCloth.DrawableType == (Types.DrawableTypes) p.Tag);
+        };
+        DrawTypeBox.SelectionChanged += (sender, args) =>
+        {
+            if (store.selectedCloth == null || DrawTypeBox.SelectedItem == null) return;
+            var item = (ComboBoxItem) DrawTypeBox.SelectedItem;
+            store.selectedCloth.DrawableType = (Types.DrawableTypes) item.Tag;
         };
     }
 
@@ -143,15 +157,9 @@ public partial class ClothingView : Page
         // }
     }
 
-    private void SelectStreamFolder(object sender, RoutedEventArgs e)
+    private void SelectStreamFolderClick(object sender, RoutedEventArgs e)
     {
-        FolderBrowserDialog dialog = new();
-        var dialogResult = dialog.ShowDialog();
-        if (dialogResult == System.Windows.Forms.DialogResult.OK)
-        {
-            store.Options.data.ResourceFolder = dialog.SelectedPath;
-            store.Options.SaveOptions();
-        }
+        SelectResourceFolder();
     }
 
     private void LoadDLC(object sender, SelectionChangedEventArgs e)
@@ -169,5 +177,37 @@ public partial class ClothingView : Page
     private void SaveAndGenerateClick(object sender, RoutedEventArgs e)
     {
         store.Options.SaveOptions();
+    }
+
+    private void NumberInputText(object sender, TextCompositionEventArgs e)
+    {
+        Util.NumberInputText(sender, e);
+    }
+
+    private void RemoveTextureClick(object sender, RoutedEventArgs e)
+    {
+        if (TextureList.SelectedItem == null) return;
+        var item = (TextureData) TextureList.SelectedItem;
+        store.selectedCloth.RemoveTexture(item);
+    }
+
+    private void SelectResourceFolder()
+    {
+        using var folderDialog = new FolderBrowserDialog()
+        {
+            Description = "Select the dg-clothes folder",
+            UseDescriptionForTitle = true,
+            ShowNewFolderButton = true
+        };
+
+        if (folderDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+        {
+            MessageBox.Show("Je moet de dg-clothes resource folder selecteren om verder te gaan");
+            return;
+        }
+
+        Properties.Settings.Default.ClothingResourceFolder = folderDialog.SelectedPath;
+        store.Options.data.ResourceFolder = folderDialog.SelectedPath;
+        Properties.Settings.Default.Save();
     }
 }

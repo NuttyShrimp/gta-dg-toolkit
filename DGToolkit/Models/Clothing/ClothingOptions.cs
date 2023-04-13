@@ -33,13 +33,16 @@ public class ClothingOptions
             Application.Current.Shutdown();
             return;
         }
-        // TODO: load data into Clothes list
+
+        data.ResourceFolder = Properties.Settings.Default.ClothingResourceFolder;
     }
 
     public void SaveOptions()
     {
         // We know that the program shutdown if there was an error
         Util.DataDir.ValidateDataPath(Util.DataDir.dataDirPath);
+        Properties.Settings.Default.ClothingResourceFolder = data.ResourceFolder;
+        Properties.Settings.Default.Save();
 
         if (store.selectedDLC != null)
         {
@@ -48,25 +51,12 @@ public class ClothingOptions
                 data.PedEntries.Add(store.selectedDLC.fullDlcName, new List<ClothInfo>());
             }
 
-            if (!data.PedEntries.ContainsKey(store.selectedDLC.fullPropsDlcName))
-            {
-                data.PedEntries.Add(store.selectedDLC.fullPropsDlcName, new List<ClothInfo>());
-            }
 
             var savedInfoList = data.PedEntries[store.selectedDLC.fullDlcName];
-            var savedPropInfoList = data.PedEntries[store.selectedDLC.fullPropsDlcName];
             savedInfoList.Clear();
-            savedPropInfoList.Clear();
             foreach (var clothData in store.Clothes)
             {
-                if (clothData.IsComponent())
-                {
-                    savedInfoList.Add(new(clothData));
-                }
-                else
-                {
-                    savedPropInfoList.Add(new(clothData));
-                }
+                savedInfoList.Add(new(clothData));
             }
         }
 

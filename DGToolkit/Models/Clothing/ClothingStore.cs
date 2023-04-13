@@ -15,6 +15,9 @@ namespace DGToolkit.Models.Clothing;
 
 public class ClothingStore
 {
+    public static ClothingStore _instance = new();
+    public static ClothingStore Instance => _instance;
+
     public ClothingOptions Options;
     public ObservableCollection<ClothData> Clothes { get; set; }
     public ObservableCollection<ShopPedApparel> availableDLCS { get; set; }
@@ -114,8 +117,9 @@ public class ClothingStore
             return;
         }
 
-        foreach (string filePath in filePaths)
+        for (var i = 0; i < filePaths.Count; i++)
         {
+            var filePath = filePaths[i];
             var fileName = Path.GetFileName(filePath);
             var componentRegex = new Regex(@"(p_)?(\w+)_(\d{3})(_\w+)?\.ydd$");
             var textureRegex = new Regex(@"(p_)?(\w+)_diff_(\d{3})(_\w+)?\.ytd$");
@@ -183,7 +187,24 @@ public class ClothingStore
                 clothData.SearchForTextures(Options.data.ResourceFolder);
                 LogStore.AddLogEntry(
                     $"Imported {nameResolver.DrawableType} {componentIndex} with {clothData.Textures.Count} textures");
-                return;
+                continue;
+            }
+
+            if (textureRegex.IsMatch(fileName))
+            {
+                var textureRegMatch = textureRegex.Match(fileName);
+
+                var nameResolver = new ClothNameResolver(filePath);
+                var clothData = GetDrawable(nameResolver.DrawableType, int.Parse(textureRegMatch.Groups[3].Value));
+                if (clothData == null)
+                {
+                    LogStore.AddLogEntry($"Failed to import {filePath} no component found");
+                    continue;
+                }
+
+                clothData.AddTexture(filePath);
+                LogStore.AddLogEntry($"Imported texture {filePath} to {clothData.Name}");
+                continue;
             }
 
             LogStore.AddLogEntry($"Failed to import {filePath} not a component or a texture");
@@ -191,4 +212,9 @@ public class ClothingStore
 
         Options.SaveOptions();
     }
+
+    public ClothData? GetDrawable(Types.DrawableTypes type, int index) => Clothes.ToList()
+        .Find(cloth => cloth.DrawableType == type && cloth.CurrentComponentIndex == index);
+
+    public ShopPedApparel? GetDLC(string dlcName) => availableDLCS.ToList().Find(dlc => dlc.fullDlcName == dlcName);
 }

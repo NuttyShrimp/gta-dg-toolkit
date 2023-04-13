@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace DGToolkit.Models.Clothing.Options;
 
 public class ClothingManifest
 {
+    [JsonIgnore]
     public string? ResourceFolder { get; set; }
 
     // Map of DLC name to drawable descriptions
@@ -22,7 +24,7 @@ public class ClothInfo
     public int Numeric { get; set; }
     public string PostFix { get; set; }
     public string Description { get; set; }
-    public Dictionary<string, string> TextureMap { get; set; }
+    public List<TextureData> TextureMap { get; set; }
 
     public ClothInfo()
     {
@@ -36,7 +38,6 @@ public class ClothInfo
         Numeric = data.CurrentComponentIndex;
         PostFix = data.PostFix;
         Description = data.Description;
-        TextureMap = new Dictionary<string, string>();
-        data.Textures.ToList().ForEach(x => TextureMap.Add(x.file, x.name ?? ""));
+        TextureMap = data.Textures.ToList();
     }
 }
