@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using DGToolkit.Models.Clothing;
 using DGToolkit.Models.Clothing.Options;
+using DGToolkit.Models.Clothing.YMT;
 using DGToolkit.Models.Util;
 using DGToolkit.Views.AudioPack;
 using DataFormats = System.Windows.Forms.DataFormats;
@@ -32,6 +33,7 @@ public partial class ClothingView : Page
         AllowDrop = true;
         Drop += HandleFileDrop;
         DLCPackName.DataContext = store.availableDLCS;
+        DLCPackName.SelectionChanged += onDLCSelectionChanged;
         DrawableList.ItemsSource = store.Clothes;
         DrawableList.SelectionChanged += (sender, args) =>
         {
@@ -83,6 +85,17 @@ public partial class ClothingView : Page
             var item = (ComboBoxItem) DrawTypeBox.SelectedItem;
             store.selectedCloth.DrawableType = (Types.DrawableTypes) item.Tag;
         };
+    }
+
+    private void onDLCSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (DLCPackName.SelectedItem == null)
+        {
+            DrawableInfoPanel.Visibility = Visibility.Hidden;
+            return;
+        }
+
+        store.SelectDLC((ShopPedApparel) DLCPackName.SelectedItem);
     }
 
     private void HandleFileDrop(object sender, System.Windows.DragEventArgs e)
@@ -162,11 +175,6 @@ public partial class ClothingView : Page
         SelectResourceFolder();
     }
 
-    private void LoadDLC(object sender, SelectionChangedEventArgs e)
-    {
-        store.SelectDLC((ShopPedApparel) DLCPackName.SelectedItem);
-    }
-
     private void ViewLogClick(object sender, RoutedEventArgs e)
     {
         var logDialog = new LogListDialog(store.LogStore);
@@ -209,5 +217,9 @@ public partial class ClothingView : Page
         Properties.Settings.Default.ClothingResourceFolder = folderDialog.SelectedPath;
         store.Options.data.ResourceFolder = folderDialog.SelectedPath;
         Properties.Settings.Default.Save();
+        foreach (var storeClothe in store.Clothes)
+        {
+           storeClothe.ValidateFileExisting();
+        }
     }
 }

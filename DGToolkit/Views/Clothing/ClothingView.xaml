@@ -7,10 +7,13 @@
     mc:Ignorable="d"
     Title="ClothingView"
     d:Width="1280">
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Page.Resources>
     <DockPanel Margin="10">
         <StackPanel Orientation="Vertical">
             <ComboBox x:Name="DLCPackName" IsReadOnly="True" ItemsSource="{Binding}"
-                      Text="DLC Pack" SelectionChanged="LoadDLC">
+                      Text="DLC Pack">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
@@ -26,14 +29,20 @@
                              d:ItemsSource="{d:SampleData ItemCount=5}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Width="274">
-                                    <StackPanel.ContextMenu>
+                                <Grid Width="274">
+                                    <Grid.ContextMenu>
                                         <ContextMenu>
                                             <MenuItem Header="Remove" />
                                         </ContextMenu>
-                                    </StackPanel.ContextMenu>
-                                    <TextBlock Text="{Binding DisplayName}" />
-                                </StackPanel>
+                                    </Grid.ContextMenu>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="20"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="⚠"
+                                               Visibility="{Binding FileExists, Converter={StaticResource BoolToVis}}" />
+                                    <TextBlock Grid.Column="1" Text="{Binding DisplayName}" />
+                                </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
@@ -68,20 +77,31 @@
                 <GroupBox Header="Textures">
                     <DockPanel>
                         <Menu DockPanel.Dock="Bottom">
-                            <MenuItem Header="Add Texture" Click="RemoveTextureClick" />
-                            <MenuItem Header="Remove Texture" />
+                            <MenuItem Header="Add Texture" />
+                            <MenuItem Header="Remove Texture" Click="RemoveTextureClick" />
                         </Menu>
                         <ListBox Name="TextureList">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Width="274">
-                                        <StackPanel.ContextMenu>
+                                    <Grid>
+                                        <Grid.ContextMenu>
                                             <ContextMenu>
                                                 <MenuItem Header="Remove" Click="RemoveTextureClick" />
                                             </ContextMenu>
-                                        </StackPanel.ContextMenu>
-                                        <TextBlock Text="{Binding DisplayName}" />
-                                    </StackPanel>
+                                        </Grid.ContextMenu>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="20"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding IsMissing}">
+                                            <TextBlock.ToolTip>
+                                                <TextBlock
+                                                    Text="{Binding FileName, StringFormat='Unable to find texture at: {0}'}">
+                                                </TextBlock>
+                                            </TextBlock.ToolTip>
+                                        </TextBlock>
+                                        <TextBlock Grid.Column="1" Text="{Binding DisplayName}" />
+                                    </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>

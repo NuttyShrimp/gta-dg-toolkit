@@ -6,23 +6,17 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using DGToolkit.Models.Clothing.Options;
+using DGToolkit.Models.Clothing.YMT;
 using Newtonsoft.Json;
 
 namespace DGToolkit.Models.Clothing;
 
 public class TextureData : INotifyPropertyChanged
 {
-    private string _filePath = "";
-
-    public string FilePath
-    {
-        get => _filePath;
-        set
-        {
-            _filePath = value;
-            OnPropertyChanged("DisplayName");
-        }
-    }
+    public static string TextureMissing = "⚠";
+    [JsonIgnore] public bool FileExists = false;
+    public string IsMissing => FileExists ? "" : TextureMissing;
 
     private string _fileName = "";
 
@@ -49,7 +43,15 @@ public class TextureData : INotifyPropertyChanged
         }
     }
 
-    [JsonIgnore] public string DisplayName => Name != null ? $"{Name} ({FileName})" : FileName;
+    public string DisplayName
+    {
+        get
+        {
+            var shortFileName = Regex.Replace(FileName, @"^.*\^", "");
+            return Name != null ? $"{Name} ({shortFileName})" : shortFileName;
+        }
+    }
+
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -63,10 +65,17 @@ public class TextureData : INotifyPropertyChanged
 public class ClothData
     : INotifyPropertyChanged
 {
-    private static char _offsetLetter = 'a';
+    public static char OffsetLetter = 'a';
     private static readonly string[] TypeIcons = {"🧥", "👓"};
 
-    private string dlcName;
+    // TODO: Move to shoppedApparel so we can use prop dlc names
+    private ShopPedApparel dlcInfo;
+    private string dlcName => IsPedProp() ? dlcInfo.fullPropsDlcName : dlcInfo.fullDlcName;
+
+    private string fileDirectory =>
+        Path.Combine(ClothingStore.Instance.Options.data.ResourceFolder, "stream", dlcInfo.fullDlcName);
+
+
     private Types.ClothTypes _clothType;
 
     public Types.ClothTypes ClothType
@@ -92,9 +101,9 @@ public class ClothData
         }
     }
 
-    // Includes the file name
-    public string MainPath { get; set; }
-    public int[] ExpressionMods;
+    public bool FileExists { get; set; } = false;
+    public double[] ExpressionMods;
+    public int PropMask = 1;
 
     public readonly ObservableCollection<TextureData> Textures = new();
 
@@ -142,48 +151,43 @@ public class ClothData
 
     public string DisplayName => $"{Name} (ID: {CurrentComponentIndex}) ({DrawableType})";
 
-    public ClothData(string path, string dlcName, Types.ClothTypes clothType,
+    public ClothData(string dlcName, Types.ClothTypes clothType,
         Types.DrawableTypes drawableType,
         int compIdx, string postFix, string description)
     {
-        this.dlcName = dlcName;
+        this.dlcInfo = ClothingStore.Instance.GetDLC(dlcName);
         _currentComponentIndex = compIdx;
         PostFix = postFix;
 
         ClothType = clothType;
         DrawableType = drawableType;
         Name = DrawableType + "_" + ComponentNumerics;
-        MainPath = path;
         Description = description;
-        ExpressionMods = new[] {0, 0, 0, 0, 0};
+        ExpressionMods = new[] {0, 0, 0, 0, 0.0};
         PropertyChanged += updateFileName;
+        ValidateFileExisting();
     }
 
     private void updateFileName(object sender, PropertyChangedEventArgs args)
     {
         if (args.PropertyName == "CurrentComponentIndex" || args.PropertyName == "DrawableType")
         {
-            var rootPath = Path.Combine(ClothingStore.Instance.Options.data.ResourceFolder,
-                Path.GetDirectoryName(MainPath));
-
-            var oldFilePath = Path.GetFileName(MainPath);
+            var oldFilePath = Loader.GetDrawableFileName(dlcName, _currentComponentIndex, DrawableType, PostFix);
             var newFile =
                 $"{dlcName}^{ClothNameResolver.DrawableTypeToString(DrawableType)}_{ComponentNumerics}{PostFix}.ydd";
 
-            MainPath = Path.Combine(Path.GetDirectoryName(MainPath) ?? "", newFile);
-
             if (oldFilePath == newFile) return;
 
-            if (File.Exists(Path.Combine(rootPath, newFile)))
+            if (File.Exists(Path.Combine(fileDirectory, newFile)))
             {
-                File.Delete(Path.Combine(rootPath, newFile));
+                File.Delete(Path.Combine(fileDirectory, newFile));
             }
 
-            File.Move(Path.Combine(rootPath, oldFilePath), Path.Combine(rootPath, newFile));
+            File.Move(Path.Combine(fileDirectory, oldFilePath), Path.Combine(fileDirectory, newFile));
 
             Textures.ToList().ForEach(texData =>
             {
-                var oldTexPath = Path.GetFileName(texData.FilePath);
+                var oldTexPath = Path.Combine(fileDirectory, texData.FileName);
                 var newTexFile =
                     $"{dlcName}^{ClothNameResolver.DrawableTypeToString(DrawableType)}_diff_{ComponentNumerics}_{texData.OffsetLetter}";
                 if (!IsPedProp())
@@ -192,54 +196,51 @@ public class ClothData
                 }
 
                 newTexFile += ".ytd";
-                texData.FilePath = Path.Combine(Path.GetDirectoryName(texData.FilePath) ?? "", newTexFile);
-                texData.FileName = Path.GetFileNameWithoutExtension(newTexFile).Replace(dlcName + "^", "");
+                texData.FileName = Path.GetFileName(newTexFile);
 
-                if (File.Exists(Path.Combine(rootPath, newTexFile)))
+                if (File.Exists(Path.Combine(fileDirectory, newTexFile)))
                 {
-                    File.Delete(Path.Combine(rootPath, newTexFile));
+                    File.Delete(Path.Combine(fileDirectory, newTexFile));
                 }
 
-                File.Move(Path.Combine(rootPath, oldTexPath), Path.Combine(rootPath, newTexFile));
+                File.Move(Path.Combine(fileDirectory, oldTexPath), Path.Combine(fileDirectory, newTexFile));
             });
             OnPropertyChanged("DisplayName");
         }
     }
 
-    public void SearchForTextures(string resourceFolder)
+    public void SearchForTextures()
     {
         Textures.Clear();
-        string rootPath = Path.Combine(resourceFolder,
-            Path.GetDirectoryName(MainPath));
         if (IsComponent())
         {
             var baseFileName =
                 $"{dlcName}^{ClothNameResolver.DrawableTypeToString(DrawableType)}_diff_{ComponentNumerics}_";
             for (int i = 0;; ++i)
             {
-                string relPath = Path.Combine(rootPath,
-                    $"{baseFileName}{(char) (_offsetLetter + i)}_uni.ytd");
+                string relPath = Path.Combine(fileDirectory,
+                    $"{baseFileName}{(char) (OffsetLetter + i)}_uni.ytd");
                 if (!File.Exists(relPath))
                     break;
                 Textures.Add(new TextureData()
                 {
-                    FilePath = Path.GetRelativePath(resourceFolder, relPath),
-                    FileName = Path.GetFileNameWithoutExtension(relPath).Replace(dlcName + "^", ""),
-                    OffsetLetter = (char) (_offsetLetter + i)
+                    FileExists = true,
+                    FileName = Path.GetFileName(relPath),
+                    OffsetLetter = (char) (OffsetLetter + i)
                 });
             }
 
             for (int i = 0;; ++i)
             {
-                string relPath = Path.Combine(rootPath,
-                    $"{baseFileName}{(char) (_offsetLetter + i)}_whi.ytd");
+                string relPath = Path.Combine(fileDirectory,
+                    $"{baseFileName}{(char) (OffsetLetter + i)}_whi.ytd");
                 if (!File.Exists(relPath))
                     break;
                 Textures.Add(new TextureData()
                 {
-                    FilePath = Path.GetRelativePath(resourceFolder, relPath),
-                    FileName = Path.GetFileNameWithoutExtension(relPath).Replace(dlcName + "^", ""),
-                    OffsetLetter = (char) (_offsetLetter + i)
+                    FileExists = true,
+                    FileName = Path.GetFileName(relPath),
+                    OffsetLetter = (char) (OffsetLetter + i)
                 });
             }
         }
@@ -247,15 +248,15 @@ public class ClothData
         {
             for (int i = 0;; ++i)
             {
-                string relPath = Path.Combine(rootPath,
-                    $"{dlcName}^{ClothNameResolver.DrawableTypeToString(DrawableType)}_diff_{ComponentNumerics}_{(char) (_offsetLetter + i)}.ytd");
+                string relPath = Path.Combine(fileDirectory,
+                    $"{dlcName}^{ClothNameResolver.DrawableTypeToString(DrawableType)}_diff_{ComponentNumerics}_{(char) (OffsetLetter + i)}.ytd");
                 if (!File.Exists(relPath))
                     break;
                 Textures.Add(new TextureData()
                 {
-                    FilePath = Path.GetRelativePath(resourceFolder, relPath),
-                    FileName = Path.GetFileNameWithoutExtension(relPath).Replace(dlcName + "^", ""),
-                    OffsetLetter = (char) (_offsetLetter + i)
+                    FileExists = true,
+                    FileName = Path.GetFileName(relPath),
+                    OffsetLetter = (char) (OffsetLetter + i)
                 });
             }
         }
@@ -267,8 +268,7 @@ public class ClothData
         // Update filename to match new offset letter, current drawable type, and component index
         // Add texture to list
 
-        var offsetLetter = (char) (_offsetLetter + Textures.Count);
-        var fileName = Path.GetFileNameWithoutExtension(path);
+        var offsetLetter = (char) (OffsetLetter + Textures.Count);
         var newFileName =
             $"{dlcName}^{ClothNameResolver.DrawableTypeToString(DrawableType)}_diff_{ComponentNumerics}_{offsetLetter}";
         if (!IsPedProp())
@@ -277,17 +277,15 @@ public class ClothData
         }
 
         newFileName += ".ytd";
-        var newPath = Path.Combine(ClothingStore.Instance.Options.data.ResourceFolder, Path.GetDirectoryName(MainPath),
-            newFileName);
+        var newPath = Path.Combine(fileDirectory, newFileName);
 
         File.Copy(path, newPath);
-        var relPath = Path.GetRelativePath(ClothingStore.Instance.Options.data.ResourceFolder, newPath);
 
-        if (Textures.ToList().Find(texData => texData.FilePath == relPath) == null)
+        if (Textures.ToList().Find(texData => texData.FileName == newFileName) == null)
             Textures.Add(new TextureData()
             {
-                FilePath = relPath,
-                FileName = Path.GetFileNameWithoutExtension(relPath).Replace(dlcName + "^", ""),
+                FileExists = true,
+                FileName = newFileName,
                 OffsetLetter = offsetLetter
             });
     }
@@ -306,37 +304,35 @@ public class ClothData
         if (result == DialogResult.No)
             return;
 
-        var dataResourceFolder = ClothingStore.Instance.Options.data.ResourceFolder;
-        Debug.WriteLine(Path.Combine(dataResourceFolder, texData.FilePath));
-        var tempFileName = Path.Combine(dataResourceFolder, Path.GetDirectoryName(texData.FilePath),
-            $"rem_{Path.GetFileName(texData.FilePath)}");
+        var tempFileName = Path.Combine(fileDirectory, $"rem_{Path.GetFileName(texData.FileName)}");
 
         if (File.Exists(tempFileName))
         {
             File.Delete(tempFileName);
         }
 
-        File.Move(Path.Combine(dataResourceFolder, texData.FilePath), tempFileName);
+        File.Move(Path.Combine(fileDirectory, texData.FileName), tempFileName);
 
         // Shift all textures after the deleted one
-        var charReplRE = new Regex(@"^(.+\^(?:p_)?\w*_diff_\d{3}_)([a-z])(.*\.ytd)$");
+        var charReplRE = new Regex(@"((?:p_)?\w*_diff_\d{3}_)([a-z])(.*\.ytd)$");
         for (int i = index + 1; i < Textures.Count; i++)
         {
-            var oldFilePath = Path.GetFileName(Textures[i].FilePath);
-            var filePathMatch = charReplRE.Match(oldFilePath);
+            var oldFileName = (string) Textures[i].FileName.Clone();
+            var filePathMatch = charReplRE.Match(oldFileName);
             if (!filePathMatch.Success)
             {
-                MessageBox.Show($"Failed to parse texture file name {oldFilePath}, aborting");
+                MessageBox.Show($"Failed to parse texture file name {oldFileName}, aborting");
                 break;
             }
 
             Textures[i].OffsetLetter = (char) (Textures[i].OffsetLetter - 1);
 
             // Update the file name
-            var newFileName = Regex.Replace(oldFilePath, @"(^.+^(?:p_)?\w*_diff_\d{3}_)([a-z])(.*?\.ytd)$",
+            var newFileName = Regex.Replace(oldFileName, @"((?:p_)?\w*_diff_\d{3}_)([a-z])(.*?\.ytd)$",
                 "$1" + Textures[i].OffsetLetter + "$3");
-            File.Move(Path.Combine(dataResourceFolder, Textures[i].FilePath),
-                Path.Combine(dataResourceFolder, Path.GetDirectoryName(Textures[i].FilePath), newFileName));
+            Textures[i].FileName = newFileName;
+            File.Move(Path.Combine(fileDirectory, oldFileName),
+                Path.Combine(fileDirectory, newFileName));
         }
 
         File.Delete(tempFileName);
@@ -395,5 +391,17 @@ public class ClothData
     public void SetCustomPostfix(string newPostfix)
     {
         PostFix = newPostfix;
+    }
+
+    public void ValidateFileExisting()
+    {
+        var fileName = Path.Combine(fileDirectory,
+            Loader.GetDrawableFileName(dlcName, _currentComponentIndex, DrawableType, PostFix));
+        FileExists = File.Exists(fileName);
+        foreach (var textureData in Textures)
+        {
+            var filePath = Path.Combine(fileDirectory, textureData.FileName);
+            textureData.FileExists = File.Exists(filePath);
+        }
     }
 }

@@ -16,7 +16,7 @@ public class XML
         public Util.Value bHasDrawblVariations = Util.CreateValue("false");
         public Util.Value bHasLowLODs = Util.CreateValue("false");
         public Util.Value bIsSuperLOD = Util.CreateValue("false");
-        public List<int> availComp = new List<int>() {255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255};
+        public string availComp = "255 255 255 255 255 255 255 255 255 255 255 255";
 
         public ComponentDataList aComponentData3 = new ComponentDataList();
         public SelectionSets aSelectionSets = new SelectionSets();
@@ -36,20 +36,22 @@ public class XML
     public class ComponentDataList
     {
         [XmlAttribute] public string itemType = "CPVComponentData";
-        [XmlElement("Item")] public ComponentData[] aDrawblData3 = Array.Empty<ComponentData>();
+
+        // Each entry represents 1 drawable type
+        [XmlElement("Item")] public ComponentData[] drawableList = Array.Empty<ComponentData>();
     }
 
     public class ComponentData
     {
         public Util.Value numAvailTex = Util.CreateValue("0");
-        public DrawableData[] DrawableDatas = new DrawableData[0];
+        public DrawableDataList aDrawblData3 = new DrawableDataList();
     }
 
     [XmlType("aDrawblData3")]
     public class DrawableDataList
     {
         [XmlAttribute] public string itemType = "CPVDrawblData";
-        [XmlElement("Item")] public DrawableData[] Item = Array.Empty<DrawableData>();
+        [XmlElement("Item")] public DrawableData[] Drawables = Array.Empty<DrawableData>();
     }
 
     public class DrawableData
@@ -115,7 +117,7 @@ public class XML
     public class PropMetadata
     {
         public string audioId = "none";
-        public int[] expressionMods = new int[] {0, 0, 0, 0, 0};
+        public string expressionMods = "0 0 0 0 0";
         public PropTextureDataList ComponentInfo = new PropTextureDataList();
         public string renderFlags = "";
         public Util.Value propFlags = Util.CreateValue("0");

@@ -29,9 +29,9 @@ public class ClothingStore
     public ClothingStore()
     {
         Options = new ClothingOptions(this);
-        Clothes = new ObservableCollection<ClothData>();
         availableDLCS = new ObservableCollection<ShopPedApparel>();
         loadAvailableDLCS();
+        Clothes = new ObservableCollection<ClothData>();
         Clothes.CollectionChanged += (sender, args) => { unsavedChanges = true; };
     }
 
@@ -79,12 +79,13 @@ public class ClothingStore
             if (result == DialogResult.Yes)
             {
                 Options.SaveOptions();
+                Generator.SaveXML();
             }
         }
 
         selectedDLC = dlcName;
         Clothes.Clear();
-        Loader.GenerateData(Options.data, selectedDLC.fullDlcName).ForEach(d => { Clothes.Add(d); });
+        Loader.LoadForDLC(selectedDLC).ForEach(cloth => Clothes.Add(cloth));
         unsavedChanges = false;
     }
 
@@ -177,14 +178,14 @@ public class ClothingStore
                     File.Copy(fp, newTextureFilePath);
                     filePaths.Remove(fp);
                 });
-                var clothData = new ClothData(Path.GetRelativePath(Options.data.ResourceFolder, newFilePath),
+                var clothData = new ClothData(
                     nameResolver.ClothType == Types.ClothTypes.Component
                         ? selectedDLC.fullDlcName
                         : selectedDLC.fullPropsDlcName,
                     nameResolver.ClothType,
                     nameResolver.DrawableType, componentIndex, postfix, "");
                 Clothes.Add(clothData);
-                clothData.SearchForTextures(Options.data.ResourceFolder);
+                clothData.SearchForTextures();
                 LogStore.AddLogEntry(
                     $"Imported {nameResolver.DrawableType} {componentIndex} with {clothData.Textures.Count} textures");
                 continue;

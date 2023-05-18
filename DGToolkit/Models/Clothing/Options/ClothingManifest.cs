@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DGToolkit.Models.Clothing.YMT;
 using Newtonsoft.Json;
 
 namespace DGToolkit.Models.Clothing.Options;
@@ -15,14 +16,7 @@ public class ClothingManifest
 
 public class ClothInfo
 {
-    public int[] ExpressionMods { get; set; }
-    public Types.ClothTypes ClothType { get; set; }
-
-    public Types.DrawableTypes DrawableType { get; set; }
-
-    // eg. 000
-    public int Numeric { get; set; }
-    public string PostFix { get; set; }
+    public string drawableName;
     public string Description { get; set; }
     public List<TextureData> TextureMap { get; set; }
 
@@ -32,11 +26,7 @@ public class ClothInfo
 
     public ClothInfo(ClothData data)
     {
-        ExpressionMods = data.ExpressionMods;
-        ClothType = data.ClothType;
-        DrawableType = data.DrawableType;
-        Numeric = data.CurrentComponentIndex;
-        PostFix = data.PostFix;
+        drawableName = $"{ClothNameResolver.DrawableTypeToString(data.DrawableType)}_{data.ComponentNumerics}{data.PostFix}";
         Description = data.Description;
         TextureMap = data.Textures.ToList();
     }
