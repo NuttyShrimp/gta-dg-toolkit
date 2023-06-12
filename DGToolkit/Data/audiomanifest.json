@@ -152,7 +152,7 @@
       "files": [
         {
           "name": "SIREN_1.wav",
-          "looped": false,
+          "looped": true,
           "headers": {
             "volume": 65300,
             "dopplerFactor": 5,
@@ -166,7 +166,7 @@
         },
         {
           "name": "SIREN_2.wav",
-          "looped": false,
+          "looped": true,
           "headers": {
             "volume": 65300,
             "dopplerFactor": 5,
@@ -180,7 +180,7 @@
         },
         {
           "name": "SIREN_3.wav",
-          "looped": false,
+          "looped": true,
           "headers": {
             "volume": 65300,
             "dopplerFactor": 5,
