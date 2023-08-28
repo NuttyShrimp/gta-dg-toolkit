@@ -5,7 +5,7 @@
       "name": "Drug lab",
       "ymapPath": "asset_labs\\stream\\stock_1\\int_stock_milo_.ymap",
       "ytypPath": "asset_labs\\stream\\stock_1\\int_stock.ytyp",
-      "paths": {
+      "Paths": {
         "0": [
           1
         ],
@@ -24,10 +24,11 @@
           4
         ],
         "4": [
-          3
+          3,
+          1
         ]
       },
-      "rooms": [
+      "Rooms": [
         {
           "roomIndex": 0,
           "name": "limbo",
@@ -110,7 +111,7 @@
       "name": "Occl docu",
       "ymapPath": "gtav_audio_occlusion_documentation-master\\stream\\lr_sc1_03_interior_v_shop_247_milo_.ymap",
       "ytypPath": "gtav_audio_occlusion_documentation-master\\stream\\v_int_66.ytyp",
-      "paths": {
+      "Paths": {
         "0": [
           1
         ],
@@ -122,7 +123,7 @@
           1
         ]
       },
-      "rooms": [
+      "Rooms": [
         {
           "roomIndex": 0,
           "name": "limbo",
@@ -132,14 +133,14 @@
         {
           "roomIndex": 1,
           "name": "V_66_ShopRm",
-          "reverb": 0.0,
-          "echo": 0.0
+          "reverb": 0.2,
+          "echo": 0.1
         },
         {
           "roomIndex": 2,
           "name": "V_66_BackRm",
-          "reverb": 0.0,
-          "echo": 0.0
+          "reverb": 0.8,
+          "echo": 0.3
         }
       ],
       "portals": [

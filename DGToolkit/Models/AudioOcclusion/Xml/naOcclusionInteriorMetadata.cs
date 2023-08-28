@@ -2,7 +2,7 @@
 using System.Xml.Serialization;
 using static DGToolkit.Models.Util.Util;
 
-namespace DGToolkit.Models.AudioOcclusion.Output;
+namespace DGToolkit.Models.AudioOcclusion.Xml;
 
 public class PortalEntity
 {
@@ -47,6 +47,30 @@ public class PortalInfo
     public Value DestInteriorHash { get; set; }
     public Value DestRoomIdx { get; set; }
     public PortalEntityList PortalEntityList { get; set; }
+
+    public static PortalInfo FromMetadataPortal(Metadata.PortalInfo info)
+    {
+        return new PortalInfo()
+        {
+            PortalIdx = CreateValue(info.PortalIdx.ToString()),
+            RoomIdx = CreateValue(info.RoomIdx.ToString()),
+            DestRoomIdx = CreateValue(info.DestRoomIdx.ToString()),
+            DestInteriorHash = CreateValue(info.DestInteriorHash.ToString()),
+            InteriorProxyHash = CreateValue(info.InteriorProxyHash.ToString()),
+            PortalEntityList = new PortalEntityList()
+            {
+                PortalEntList = info.PortalEntityList.ConvertAll(pel =>
+                    new PortalEntity()
+                    {
+                        IsDoor = CreateValue(pel.IsDoor.ToString()),
+                        IsGlass = CreateValue(pel.IsGlass.ToString()),
+                        MaxOcclusion = CreateValue(pel.MaxOcclusion.ToString()),
+                        EntityModelHashkey = CreateValue(pel.EntityModelHashkey.ToString())
+                    }
+                )
+            },
+        };
+    }
 }
 
 public class PortalInfoContainer

@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Xml;
 using CodeWalker.GameFiles;
-using DGToolkit.Models.AudioOcclusion.Output;
+using DGToolkit.Models.AudioOcclusion.Graph;
 using DGToolkit.Models.AudioOcclusion.PathNodes;
+using DGToolkit.Models.AudioOcclusion.Xml;
 using DGToolkit.Models.Util;
 using static DGToolkit.Models.Util.Util;
+using PortalEntity = DGToolkit.Models.AudioOcclusion.Metadata.PortalEntity;
+using PortalInfo = DGToolkit.Models.AudioOcclusion.Metadata.PortalInfo;
 
 namespace DGToolkit.Models.AudioOcclusion;
 
@@ -35,8 +38,9 @@ public class OcclGenerator
     {
         var portalInfoList = new List<PortalInfo>();
 
-        foreach (var (fromRoom, destRooms) in Entry.paths)
+        foreach (var (fromRoom, destRooms) in Entry.Paths)
         {
+            Debug.WriteLine($"From Room: {fromRoom} Dest Rooms: {string.Join(",", destRooms)}");
             foreach (var destRoom in destRooms)
             {
                 var portalRoomIdx = 0;
@@ -49,12 +53,12 @@ public class OcclGenerator
                     {
                         var portalInfo = new PortalInfo()
                         {
-                            PortalIdx = CreateValue(mloPortal.Index.ToString()),
-                            RoomIdx = CreateValue(fromRoom.ToString()),
-                            DestRoomIdx = CreateValue(destRoom.ToString()),
-                            DestInteriorHash = CreateValue(occlusionHash.ToString()),
-                            InteriorProxyHash = CreateValue(occlusionHash.ToString()),
-                            PortalEntityList = new PortalEntityList(),
+                            PortalIdx = mloPortal.Index,
+                            RoomIdx = fromRoom,
+                            DestRoomIdx = destRoom,
+                            DestInteriorHash = occlusionHash,
+                            InteriorProxyHash = occlusionHash,
+                            PortalEntityList = new List<PortalEntity>(),
                         };
                         if (mloPortal.AttachedObjects != null && mloPortal.AttachedObjects.Length > 0)
                         {
@@ -64,13 +68,12 @@ public class OcclGenerator
                             {
                                 var portalEntity = new PortalEntity()
                                 {
-                                    EntityModelHashkey = CreateValue(rp.entityHash.ToString()),
-                                    MaxOcclusion = CreateValue(rp.maxOccl.GetValueOrDefault(0.7)
-                                        .ToString(CultureInfo.InvariantCulture)),
-                                    IsDoor = CreateValue(rp.isDoor.ToString().ToLower()),
-                                    IsGlass = CreateValue(rp.isGlass.ToString().ToLower()),
+                                    EntityModelHashkey = rp.entityHash,
+                                    MaxOcclusion = rp.maxOccl ?? 0.7,
+                                    IsDoor = rp.isDoor ?? false,
+                                    IsGlass = rp.isGlass ?? false,
                                 };
-                                portalInfo.PortalEntityList.PortalEntList.Add(portalEntity);
+                                portalInfo.PortalEntityList.Add(portalEntity);
                             });
                         }
 
@@ -80,19 +83,45 @@ public class OcclGenerator
             }
         }
 
+        // portalInfoList should be sorted as following order
+        // InteriorProxyHash
+        // RoomIdx
+        // PortalIdx
+        // InteriorProxyHash == DestInteriorHash first than sort DestInteriorHash by size
+
+        portalInfoList.Sort((a, b) =>
+        {
+            var aHash = a.InteriorProxyHash;
+            var bHash = b.InteriorProxyHash;
+            if (aHash == bHash)
+            {
+                var aRoomIdx = a.RoomIdx;
+                var bRoomIdx = b.RoomIdx;
+                if (aRoomIdx == bRoomIdx)
+                {
+                    var aPortalIdx = a.PortalIdx;
+                    var bPortalIdx = b.PortalIdx;
+                    return aPortalIdx.CompareTo(bPortalIdx);
+                }
+
+                return aRoomIdx.CompareTo(bRoomIdx);
+            }
+
+            return aHash.CompareTo(bHash);
+        });
+
         return portalInfoList;
     }
 
-    private List<Output.PathNode> GeneratePathNodeList(List<PortalInfo> portalInfoList)
+    private List<Xml.PathNode> GeneratePathNodeList(List<PortalInfo> portalInfoList)
     {
         var nodes = new List<PathNodes.PathNode>();
-        var roomJoaats = new Dictionary<int, int>();
         var roomHashes = new Dictionary<int, int>();
         foreach (var room in mloArchetype.rooms)
         {
             var joaat = new JenkHash(room.Name, JenkHashInputEncoding.UTF8).HashInt;
-            roomJoaats.Add(room.Index, joaat);
-            roomHashes.Add(room.Index, Int32Round(occlusionHash ^ joaat));
+            var hash = Int32Round(room.Name == "limbo" ? joaat : occlusionHash ^ joaat);
+            roomHashes.Add(room.Index, hash);
         }
 
         List<IndexValue<PortalInfo>> indexedPortalInfoList =
@@ -100,15 +129,15 @@ public class OcclGenerator
 
         List<NodeGeneration> generationQueue = new List<NodeGeneration>();
 
-        foreach (var (fromRoom, toRooms) in Entry.paths)
+        foreach (var (fromRoom, toRooms) in Entry.Paths)
         {
             foreach (var toRoom in toRooms)
             {
                 // Find all portals with these rooms
                 var portals = indexedPortalInfoList.FindAll(p =>
-                    p.Value.RoomIdx.value == fromRoom.ToString() && p.Value.DestRoomIdx.value == toRoom.ToString()
+                    p.Value.RoomIdx == fromRoom && p.Value.DestRoomIdx == toRoom
                 );
-                var key = Int32Round(roomJoaats[fromRoom] - roomHashes[toRoom]);
+                var key = Int32Round(roomHashes[fromRoom] - roomHashes[toRoom]);
                 if (portals.Count == 0)
                 {
                     generationQueue.Add(new NodeGeneration()
@@ -118,7 +147,7 @@ public class OcclGenerator
                         FromRoom = fromRoom,
                         hopCount = 0,
                         usedRoom = new List<int>(),
-                        path = new List<NodeGenerationEntry>()
+                        path = new List<List<NodeGenerationEntry>>()
                     });
                 }
                 else
@@ -138,13 +167,31 @@ public class OcclGenerator
         }
 
         // TODO: traverse queue and do fun stuff
-        
-        return nodes.ConvertAll(n => new Output.PathNode()
+        // RoomGraph graph = new RoomGraph(portalInfoList);
+
+        bool addedPathNode = true;
+        while (generationQueue.Any() && addedPathNode)
+        {
+            addedPathNode = false;
+            foreach (var queue in generationQueue)
+            {
+                var path = new List<int> {queue.FromRoom};
+                var success = queue.SearchPath(ref path, ref indexedPortalInfoList);
+                if (success)
+                {
+                    addedPathNode = true;
+                    break;
+                }
+            }
+        }
+
+
+        return nodes.ConvertAll(n => new Xml.PathNode()
             {
                 Key = CreateValue(n.Key.ToString()),
                 PathNodeChildList = new PathNodeChildList()
                 {
-                    PortalEntList = n.EntList.ConvertAll(ent => new Output.PathNodeChild()
+                    PortalEntList = n.EntList.ConvertAll(ent => new Xml.PathNodeChild()
                     {
                         PathNodeKey = CreateValue(ent.Key.ToString()),
                         PortalInfoIdx = CreateValue(ent.PortalInfoIdx.ToString())
@@ -154,20 +201,22 @@ public class OcclGenerator
         );
     }
 
+    // TODO: Move to a better place
     private void GenerateOcclusionMetadata()
     {
         var metadata = new naOcclusionInteriorMetadata();
-        metadata.PortalInfoList.PortalInfoList = GeneratePortalInfoList();
-        metadata.PathNodeList.PortalInfoList = GeneratePathNodeList(metadata.PortalInfoList.PortalInfoList);
+        var portalInfoList = GeneratePortalInfoList();
+        metadata.PortalInfoList.PortalInfoList = portalInfoList.ConvertAll(Xml.PortalInfo.FromMetadataPortal);
+        metadata.PathNodeList.PortalInfoList = GeneratePathNodeList(portalInfoList);
 
         var xmlFilePath = Path.Join(outputPath, $"{occlusionHash}.ymt.pso.xml");
-        Xml.WriteXml(xmlFilePath, metadata);
+        Util.Xml.WriteXml(xmlFilePath, metadata);
 
-        var ymtPath = Path.Join(outputPath, $"{occlusionHash}.ymt");
-        XmlDocument dat54Doc = new();
-        dat54Doc.Load(xmlFilePath);
-        var ymtFile = XmlRel.GetRel(dat54Doc);
-        File.WriteAllBytes(ymtPath, ymtFile.Save());
+        // var ymtPath = Path.Join(outputPath, $"{occlusionHash}.ymt");
+        // XmlDocument dat54Doc = new();
+        // dat54Doc.Load(xmlFilePath);
+        // var ymtFile = XmlRel.GetRel(dat54Doc);
+        // File.WriteAllBytes(ymtPath, ymtFile.Save());
     }
 
     private void LoadYmap()
@@ -204,6 +253,7 @@ public class OcclGenerator
         occlusionHash = Int32Round(intArchHash ^ Convert.ToInt32(mloEnt.Position.X * 100) ^
                                    Convert.ToInt32(mloEnt.Position.Y * 100) ^
                                    Convert.ToInt32(mloEnt.Position.Z * 100));
+        Debug.WriteLine($"Occlusion hash: {occlusionHash}");
     }
 
     public void Start()

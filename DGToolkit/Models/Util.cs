@@ -42,7 +42,7 @@ internal class Xml
         var xmlWriter = XmlWriter.Create(stream, xmlWriterSettings);
         XmlSerializer x = new(container.GetType());
         x.Serialize(xmlWriter, container,
-            new XmlSerializerNamespaces(new[] {XmlQualifiedName.Empty})
+            new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty })
         );
     }
 }
@@ -112,7 +112,7 @@ public class Util
 
     public static Value CreateValue(string val)
     {
-        return new Value {value = val};
+        return new Value { value = val };
     }
 
     public class Value
@@ -127,5 +127,12 @@ public class Util
         e.Handled = !numReg.IsMatch(e.Text);
     }
 
-    public static int Int32Round(int num) => (int) (num & 0xffffffff);
+    public static int Int32Round(int num)
+    {
+        if (num > Int32.MaxValue || num < Int32.MinValue)
+        {
+            return Convert.ToInt32(num);
+        }
+        return num;
+    }
 }

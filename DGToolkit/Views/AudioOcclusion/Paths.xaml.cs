@@ -31,7 +31,7 @@ public partial class Paths : Page
         if (Model.selected.Value == null) return;
         rows = new List<ExpandoObject>();
         // First col is text
-        var paths = Model.data.interiors[Model.selected.Value.Value].paths;
+        var paths = Model.data.interiors[Model.selected.Value.Value].Paths;
         
         //clear rows & columns
         AudioPaths.Columns.Clear();
@@ -84,7 +84,7 @@ public partial class Paths : Page
     private void AudioPaths_OnCellEditEnding(object? sender, DataGridCellEditEndingEventArgs e)
     {
         if (e.EditAction == DataGridEditAction.Cancel || Model.selected.Value == null) return;
-        var paths = Model.data.interiors[Model.selected.Value.Value].paths;
+        var paths = Model.data.interiors[Model.selected.Value.Value].Paths;
         // fromRoom is header of column to int
         var fromRoom = int.Parse(e.Column.Header.ToString());
         if (!paths.ContainsKey(fromRoom))
@@ -102,10 +102,12 @@ public partial class Paths : Page
         var element = (CheckBox) e.EditingElement;
         if (element.IsChecked == true)
         {
+            Debug.WriteLine($"Adding path {toRoom} to {fromRoom}");
             paths[fromRoom].Add(toRoom);
         }
         else
         {
+            Debug.WriteLine($"Removing path {toRoom} to {fromRoom}");
             paths[fromRoom].Remove(toRoom);
         }
     }

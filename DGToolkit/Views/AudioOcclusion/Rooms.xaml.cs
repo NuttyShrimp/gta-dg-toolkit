@@ -20,6 +20,6 @@ public partial class Rooms : Page
     {
         if (_model.selected.Value == null) return;
         var entry = _model.data.interiors[_model.selected.Value.Value];
-        AudioRooms.DataContext = entry.rooms;
+        AudioRooms.DataContext = entry.Rooms;
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using Newtonsoft.Json;
@@ -20,9 +21,10 @@ public class InteriorPortal
 {
     // Index in entity array (attachedObjects)
     public int entityIdx { get; set; }
+
     // What we should use in the ymt for portalIdx (it is the idx in lists of portals where the srcRoomIdx is the same)
     public int portalRoomIdx { get; set; }
-    public Int32? entityHash { get; set; }
+    public Int32 entityHash { get; set; }
     public int? portalId { get; set; }
     public int? srcRoomIdx { get; set; }
     public int? destRoomIdx { get; set; }
@@ -41,8 +43,8 @@ public class InteriorEntry
     public string? ytypPath { get; set; }
 
     // From room -> occlusion to listed rooms
-    public Dictionary<int, HashSet<int>>? paths { get; set; }
-    public ObservableCollection<InteriorRoom> rooms { get; set; }
+    public Dictionary<int, HashSet<int>>? Paths { get; set; }
+    public ObservableCollection<InteriorRoom> Rooms { get; set; }
     public ObservableCollection<InteriorPortal> portals { get; set; }
 
     public bool ShouldSerializeindex()
@@ -53,12 +55,12 @@ public class InteriorEntry
     public InteriorEntry deepCopy()
     {
         var entry = (InteriorEntry) MemberwiseClone();
-        if (entry.paths != null)
+        if (entry.Paths != null)
         {
-            entry.paths = new Dictionary<int, HashSet<int>>(paths);
+            entry.Paths = new Dictionary<int, HashSet<int>>(Paths);
         }
 
-        entry.rooms = new ObservableCollection<InteriorRoom>(rooms);
+        entry.Rooms = new ObservableCollection<InteriorRoom>(Rooms);
         entry.portals = new ObservableCollection<InteriorPortal>(portals);
         return entry;
     }

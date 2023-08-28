@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using CodeWalker.GameFiles;
@@ -160,8 +161,8 @@ public class OcclusionModel
         if (selected.Value == null) return;
         if (_copy.ytypPath != data.interiors[selected.Value.Value].ytypPath)
         {
-            data.interiors[selected.Value.Value].paths = LoadPaths(data.interiors[selected.Value.Value]);
-            data.interiors[selected.Value.Value].rooms = LoadRooms(data.interiors[selected.Value.Value]);
+            data.interiors[selected.Value.Value].Paths = LoadPaths(data.interiors[selected.Value.Value]);
+            data.interiors[selected.Value.Value].Rooms = LoadRooms(data.interiors[selected.Value.Value]);
             data.interiors[selected.Value.Value].portals = LoadPortals(data.interiors[selected.Value.Value]);
         }
         save();
@@ -171,14 +172,14 @@ public class OcclusionModel
     {
         if (entry.index == null) return;
         selected.Value = entry.index;
-        if (entry.paths.Count == 0)
+        if (entry.Paths.Count == 0)
         {
-            entry.paths = LoadPaths(entry);
+            entry.Paths = LoadPaths(entry);
         }
 
-        if (entry.rooms.Count == 0)
+        if (entry.Rooms.Count == 0)
         {
-            entry.rooms = LoadRooms(entry);
+            entry.Rooms = LoadRooms(entry);
         }
 
         if (entry.portals.Count == 0)
@@ -196,9 +197,9 @@ public class OcclusionModel
             name = $"Interior {data.interiors.Count}",
             ymapPath = "",
             ytypPath = "",
-            paths = new Dictionary<int, HashSet<int>>(),
+            Paths = new Dictionary<int, HashSet<int>>(),
             portals = new ObservableCollection<InteriorPortal>(),
-            rooms = new ObservableCollection<InteriorRoom>(),
+            Rooms = new ObservableCollection<InteriorRoom>(),
             index = data.interiors.Count
         };
         data.interiors.Add(entry);
